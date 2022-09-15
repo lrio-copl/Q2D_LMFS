@@ -1,0 +1,1 @@
+(for [i 1 (var q2d_lmfs_coefcount)] (set (nth (var i) (var q2d_lmfs_coefgoal)) (* 1 (nth (var i) (var q2d_lmfs_coefmes)))))

@@ -1,0 +1,28 @@
+(codev.suppressoutput)
+(codev.parseinput cancel_mes_no_rdy (s surq "[sk]"))
+
+
+(if (<= (database umo ud1 (s (var surq)) (c 1)) 0)
+ ((ver n)(out y)
+  (print)
+  (set result (call cverror "Q2D radius must be larger than 0" 0))
+  (print)
+  (goto end))
+)
+
+;; (if (> (/ 1 (database umo ud1 (s (var surq)))) (call absf (- (database cuy (s (var surq))) (var qfitcurv))))
+;;  (ciy (s (var surq)) (/ (* -1 (var qfitcurv))(var qfitcurvcalib)))
+;; )
+
+(local num (nth coefloc 700))
+
+(for [i 3 (var qfitcoefcount)]
+ (set (nth coefloc (var ^i))
+  (- (database umo ud1 (s (var surq)) (c (var i)))
+   (/ (var (nth qfitcoefmes (var i)))
+    (var (nth qfitcoefcalib (var i)))
+   ))))
+
+(for [i 3 (var qfitcoefcount)]
+ (umo ud1 (s (var surq)) (c (var i )) (nth (var coefloc) (var i))))
+

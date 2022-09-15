@@ -1,0 +1,5 @@
+(set (num normradius) (arg 1))
+
+(usr usr_get_qmn_coef2_der (var q2d_lmfs_coefcount) (var q2d_lmfs_coefmes)
+     (var normradius) (var q2d_lmfs_mapsize) (var q2d_lmfs_mesr)
+     (var q2d_lmfs_mest))

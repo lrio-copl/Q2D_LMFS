@@ -1,0 +1,6 @@
+(codev.suppressoutput)
+(num (var mapsize))
+(set (num coefcount) (arg 1))
+(set (num qfitradius) 1)
+(usr usr_get_qfit_pos_size_der (var coefcount) (var mapsize))
+(require `q2d_lmfs/gen_var_der (var coefcount) (var mapsize))

@@ -1,0 +1,25 @@
+(codev.suppressoutput)
+(codev.startup)
+
+;; (res `cv_lens:ag_triplet)
+(res `cv_lens:ag_dblgauss)
+
+(require `q2d_lmfs/setup 9)
+(require `q2d_lmfs/prep_os_usr (s 11))
+(require `q2d_lmfs/compute_calibration)
+
+(require `q2d_lmfs/measure_q2d_coef)
+
+(require `get_goal_lin)
+;; (require `gradient_goal)
+;; (require `q2d_lmfs/apply_goal_calib_usr)
+
+(for [i 1 20]
+  (require `q2d_lmfs/measure_q2d_coef)
+  (require `q2d_lmfs/cancel_mes_goal_usr))
+
+(out y)
+(codev.rename_fig "fig/testv")
+(option vie)
+(codev.rename_fig "fig/testf")
+(option fie)

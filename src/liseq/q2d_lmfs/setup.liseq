@@ -1,0 +1,7 @@
+(codev.suppressoutput)
+(dro fct measure_q2d_lmfs_map)
+(set (num order) (arg 1))
+(set (num size) (+ (- (* (** (var order) 2) 2) (var order)) 3))
+
+(require `q2d_lmfs/gen_q2d_lmfs_var (var size))
+(require `q2d_lmfs/gen_q2d_lmfs_func)

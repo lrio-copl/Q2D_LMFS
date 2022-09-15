@@ -1,0 +1,8 @@
+(codev.suppressoutput)
+(for [i 3 (var q2d_lmfs_coefcount)] (set (. ^i q2d_lmfs_coefgoal) 0)(set (. ^i q2d_lmfs_coefcalib) 1))
+(set q2d_lmfs_curvcalib 1)
+(set q2d_lmfs_ymaxobj 0)
+(set q2d_lmfs_xmaxobj 0)
+(set q2d_lmfs_ymaxang 0)
+(set q2d_lmfs_xmaxang 0)
+(set q2d_lmfs_prevsysinfo "")

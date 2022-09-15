@@ -1,0 +1,10 @@
+(codev.suppressoutput)
+(bnd n)
+(if (eq (database typ sur (s (var q2d_lmfs_surn))) :UD1)
+    (if (eq (database umr ud1 (s (var q2d_lmfs_surn))) :uds_qmn2.dll)
+        (set (num maps) (- (database umo ud1 (s (var q2d_lmfs_surn)) c1) 0.001))
+        (set (num maps) (- (database map (s (var q2d_lmfs_surn))) 0.001)))
+    (set (num maps) (- (database map (s (var q2d_lmfs_surn))) 0.001)))
+
+(require :q2d_lmfs/get_q2d_map (var maps))
+(require :q2d_lmfs/get_q2d_coef (var maps))

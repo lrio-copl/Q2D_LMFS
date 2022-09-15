@@ -1,0 +1,35 @@
+(codev.suppressoutput)
+(out y)
+(global num (nth (arg 2) q2d_lmfs_mapxder) (nth (arg 2) q2d_lmfs_mapyder)
+        (nth (arg 2) q2d_lmfs_maprder) (nth (arg 2) q2d_lmfs_maptder))
+
+(global num (nth (arg 2) q2d_lmfs_mesr) (nth (arg 2) q2d_lmfs_mest)
+        (nth (arg 2) 2 q2d_lmfs_basedist))
+
+(global num (nth (arg 2) q2d_lmfs_sagder) (nth (arg 2) q2d_lmfs_sagrder)
+        (nth (arg 2) q2d_lmfs_sagtder) (nth (arg 2) q2d_lmfs_sagxder)
+        (nth (arg 2) q2d_lmfs_sagyder))
+
+(global num (nth (arg 2) 6 q2d_lmfs_rayinfo_in)
+        (nth (arg 2) 6 q2d_lmfs_rayinfo_out) (nth (arg 2) 3 q2d_lmfs_snrmcalib)
+        (nth (arg 2) 3 q2d_lmfs_snrm) (nth (arg 1) q2d_lmfs_coefmes) (nth (arg 1) q2d_lmfs_coefcalib) (nth (arg 1) q2d_lmfs_coefgoal))
+
+(global num (var q2d_lmfs_mapsize) (var q2d_lmfs_curvcalib)
+        (var q2d_lmfs_ymaxobj) (var q2d_lmfs_ymaxang) (var q2d_lmfs_xmaxobj)
+        (var q2d_lmfs_xmaxang) (var q2d_lmfs_curv) (var q2d_lmfs_surn) (var q2d_lmfs_coefcount))
+(global str (var q2d_lmfs_prevsysinfo) (var q2d_lmfs_kind) (var q2d_lmfs_surs))
+
+(set (var q2d_lmfs_coefcount) (arg 1))
+(set (num normradius) 1)
+(set (num mapsize) (arg 2))
+(usr usr_get_qfit_pos2_der (var q2d_lmfs_coefcount) (var normradius) (var mapsize)
+     (var q2d_lmfs_mapxder) (var q2d_lmfs_mapyder) (var q2d_lmfs_maprder)
+     (var q2d_lmfs_maptder))
+
+(set (var q2d_lmfs_mapsize) (var mapsize))
+
+(for [i 1 (var q2d_lmfs_coefcount)]
+  (set (nth (var i) (var q2d_lmfs_coefcalib)) 1)
+  (set (nth (var i) 1 (var q2d_lmfs_snrmcalib)) 1)
+  (set (nth (var i) 2 (var q2d_lmfs_snrmcalib)) 1)
+  (set (nth (var i) 3 (var q2d_lmfs_snrmcalib)) 1))

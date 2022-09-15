@@ -1,0 +1,17 @@
+(codev.suppressoutput)
+(codev.parseinput prep_os (s surq :sk))
+(set (num (var ok)) (database map (s (var surq))))
+
+(UD1 (s (var surq)))
+(UMR (s (var surq)) UD1 :uds_qmn2)
+(UMN (s (var surq)) UD1 2)
+(UMO (s (var surq)) UD1 c1 (var ok))
+(UMO (s (var surq)) UD1 c2 1)
+(UMN (s (var surq)) UD1 (var q2d_lmfs_coefcount))
+(CIR (s (var surq)) (L :qft) (var ok))
+
+(require `q2d_lmfs/reset_method)
+
+(set q2d_lmfs_surn (var surq))
+(set q2d_lmfs_kind "usr")
+(set q2d_lmfs_surs (call concat "s" (call num_to_str (var surq))))

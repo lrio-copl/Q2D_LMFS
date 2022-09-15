@@ -1,0 +1,3 @@
+(codev.suppressoutput)
+(usr usr_remove_curv_der (var q2d_lmfs_coefcount) (var q2d_lmfs_coefmes)
+     (var q2d_lmfs_curv))

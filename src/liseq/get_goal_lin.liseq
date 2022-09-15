@@ -1,0 +1,42 @@
+(local num (nth 1000 coeftemp) (nth 1000 err) (nth 1000 ang))
+(bnd y)
+(for [i 1 (var q2d_lmfs_mapsize)]
+  (set (nth (var i) coeftemp)
+       (/ (+ (* (nth (var i) 2 q2d_lmfs_snrmcalib)
+                (call sinf (nth (var i) q2d_lmfs_maptder)))
+             (* (nth (var i) 1 q2d_lmfs_snrmcalib)
+                (call cosf (nth (var i) q2d_lmfs_maptder))))
+          (nth (var i) 3 q2d_lmfs_snrmcalib)))
+  (set (nth (var i) ang)
+       (call atanf
+             (call absf
+                   (/ (call sqrtf
+                            (+ (** (nth (var i) 5 q2d_lmfs_rayinfo_in) 2)
+                               (** (nth (var i) 4 q2d_lmfs_rayinfo_in) 2)))
+                      (nth (var i) 6 q2d_lmfs_rayinfo_in))))))
+
+(for [i 1 (var q2d_lmfs_mapsize)]
+  (set (nth (var i) err)
+       (* 100 (- (* (* (nth 1 q2d_lmfs_maprder) (nth 1 coeftemp))
+                    (/ (nth (var i) ang) (nth 1 ang)))
+                 (nth (var i) coeftemp)))))
+
+(for [i 1 (var q2d_lmfs_mapsize)]
+  (set (nth (var i) err) (- (nth (var i) err) (nth (var q2d_lmfs_mapsize) err))))
+
+(for [i 1 (var q2d_lmfs_mapsize)]
+  (set (nth (var i) q2d_lmfs_mest) 0)
+  (set (nth (var i) q2d_lmfs_mesr) (nth (var i) err)))
+
+(set (num maps) (- (database umo ud1 (s (var q2d_lmfs_surn)) c1) 0.001))
+
+;; (for [i 1 (var q2d_lmfs_mapsize)]
+;;   (set (nth (var i) q2d_lmfs_mesr) (* 1 (nth (var i) 1 q2d_lmfs_basedist)))
+;;   (set (nth (var i) q2d_lmfs_mest) (* 1 (nth (var i) 2 q2d_lmfs_basedist)))
+;;   )
+
+(require `q2d_lmfs/get_q2d_coef (var maps))
+(require `q2d_lmfs/remove_curv_coef (var q2d_lmfs_coefcount)
+         (var q2d_lmfs_coefmes) (var q2d_lmfs_curv))
+
+(require `q2d_lmfs/move_mes_to_goal)

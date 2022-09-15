@@ -1,0 +1,14 @@
+(defun measure_q2d_lmfs_map (nil) (set (num output) 0) (num (nth 8 raytra_out))
+       (num (nth 8 raytra_in))
+       (for [i 1 (var q2d_lmfs_mapsize)]
+         (for [j 1 6]
+           (set (nth (var j) (var raytra_in))
+                (nth (var i) (var j) (var q2d_lmfs_rayinfo_in))))
+         (set output (call raytra_xyzlmn 0 0 0
+                           (var raytra_in)
+                           (var raytra_out)))
+         (for [j 1 6]
+           (set (nth (var i) (var j) (var q2d_lmfs_rayinfo_out))
+                (nth (var j) (var raytra_out))))
+         (if (neq (var output) 0) rtn )
+         ) output)

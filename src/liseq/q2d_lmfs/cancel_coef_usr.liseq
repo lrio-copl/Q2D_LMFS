@@ -1,0 +1,3 @@
+(codev.suppressoutput)
+(for [i 3 (var q2d_lmfs_coefcount)]
+  (umo ud1 (s (var q2d_lmfs_surn)) (c (var i)) 0))

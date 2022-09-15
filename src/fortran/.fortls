@@ -1,0 +1,5 @@
+{
+  "source_dirs": ["./","./modules"],
+  "pp_suffixes": [".H", ".h"],
+  "debug_log": false
+}
