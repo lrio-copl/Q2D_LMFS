@@ -2,5 +2,3 @@
 (require :q2d_lmfs/measure_q2d_coef)
 (require :q2d_lmfs/remove_curv_coef (var q2d_lmfs_coefcount)
          (var q2d_lmfs_coefmes) (var q2d_lmfs_curv))
-
-;; (set (var q2d_lmfs_curv) (* (var q2d_lmfs_curvcalib) (var q2d_lmfs_curv)))

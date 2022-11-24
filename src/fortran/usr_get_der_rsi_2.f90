@@ -48,6 +48,9 @@ SUBROUTINE usr_get_der_rsi_2(pos_r, &
    efl_par = rr/rt
    filter = (rt <= MINVAL(rt) + 1E-10)
    efl2 = SUM(efl_par*filter)/SUM(filter*1)
+   ! write (*,*) 'efl2', efl2
+   ! efl2 = 99.66
+   ! write (*,*) 'efl22', efl2
 
    obj = ray_tra_in(:, 4:)
    out(:, :2) = ray_tra_out(:, :2)

@@ -1,8 +1,10 @@
 (codev.suppressoutput)
 (lcl num (nth 1000 (var coeftemp)) (nth 1000 (var coefbase)))
+(lcl num (var max_cal) (var lcl_cal))
 
 ; SNRM
 (sav q2d_lmfs_calib_temp)
+(pim n)
 (if (eq (var q2d_lmfs_kind) :usr)
     (require `q2d_lmfs/cancel_coef_usr))
 
@@ -13,13 +15,24 @@
   (set (nth (var i) 2 q2d_lmfs_snrmcalib) (nth (var i) 2 q2d_lmfs_snrm))
   (set (nth (var i) 3 q2d_lmfs_snrmcalib) (nth (var i) 3 q2d_lmfs_snrm)))
 
-(require `q2d_lmfs/measure_q2d_coef)
-
 (for [i 1 (var q2d_lmfs_mapsize)]
   (set (nth (var i) 1 q2d_lmfs_basedist) (nth (var i) q2d_lmfs_mesr))
   (set (nth (var i) 2 q2d_lmfs_basedist) (nth (var i) q2d_lmfs_mest)))
 
+
+(set (var max_cal) 0)
+(for [i 3 (var q2d_lmfs_coefcount)]
+  (set lcl_cal (call absf (nth (var i) q2d_lmfs_coefmes)))
+  ;; (print (var lcl_cal))
+  (if (< (var max_cal) (var lcl_cal))
+      (set max_cal (var lcl_cal)))
+  ;; (set (nth (var i) coefbase) (nth (var i) q2d_lmfs_coefmes))
+  )
+
+;; (print "---------")
+
 (res q2d_lmfs_calib_temp)
+(pim n)
 
 (for [i 1 (var q2d_lmfs_coefcount)]
   (set (nth (var i) q2d_lmfs_coefcalib) 1))
@@ -60,11 +73,13 @@
 
 (for [i 3 (var q2d_lmfs_coefcount)]
   (set (nth (var i) q2d_lmfs_coefcalib)
-       (/ (var calibval) (nth (var i) coeftemp))))
+       (/ (* 1.414213562373095 (var calibval)) (nth (var i) coeftemp))))
 
 (res q2d_lmfs_calib_temp)
+(pim n)
 
 (require `q2d_lmfs/apply_goal_usr)
+(require `q2d_lmfs/measure_q2d_coef_curv)
 (set (num curvbase) (var q2d_lmfs_curv))
 (ciy (s (var q2d_lmfs_surn)) (var curvval))
 (require `q2d_lmfs/measure_q2d_coef_curv)

@@ -1,0 +1,7 @@
+DftiFreeDescriptor
+DftiComputeForward
+DftiCommitDescriptor
+DftiSetValue
+DftiCreateDescriptor
+DGEMV
+DGEMM

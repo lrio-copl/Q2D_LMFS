@@ -1,33 +1,26 @@
 (codev.suppressoutput)
-(lcl num (nth 1000 coefloc))
+(lcl num (nth 1000 coefloc) (var lclerr) (var correrr))
 
-;; (if (leq (database umo ud1 (s (var q2d_lmfs_surn))) 0)
-;; (out y) (set (num resultv) (call cverror "Q2D radius must be larger than 0", 0)) (goto end))
-
+;; (print "       coef          mes           goal          lclerr          corr ")
 (for [i 3 (var q2d_lmfs_coefcount)]
-  ;; (for [i 1 ]
-  (set (nth (var i) coefloc)
-       (+ (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
-          (* (* 3.5 (nth (var i) q2d_lmfs_coefcalib))
-             (- (nth (var i) q2d_lmfs_coefgoal) (nth (var i) q2d_lmfs_coefmes)))))
-  (if (> (call absf (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i))))
-         1e-12)
-      (print (var i) (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
-             (nth (var i) q2d_lmfs_coefmes) (nth (var i) q2d_lmfs_coefgoal)
-             (* (nth (var i) q2d_lmfs_coefcalib)
-                (- (nth (var i) q2d_lmfs_coefgoal)
-                   (nth (var i) q2d_lmfs_coefmes))))
-      ;; par
-      )
-  ;; par
-  )
+  (if (> (call absf (nth (var i) q2d_lmfs_coefgoal)) 1e-10)
+      ((set (var lclerr)
+           (- (nth (var i) q2d_lmfs_coefgoal)
+              (* (nth (var i) q2d_lmfs_coefcalib)
+                 (nth (var i) q2d_lmfs_coefmes))))
+      (set (var correrr)
+           (/ (* 250 (call absf (var lclerr)))
+              (* (call sqrtf (- (var i) 2))
+                 (call absf (nth (var i) q2d_lmfs_coefgoal)))))
+      (if (> (var correrr) 1) (set (var correrr) 1))
+      (set (nth (var i) coefloc)
+           (+ (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
+              (* (var correrr) (var lclerr))))
+      (umo ud1 (s (var q2d_lmfs_surn)) (c (var i)) (nth (var i) coefloc))
+      ;; (print (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
+      ;;        (* (nth (var i) q2d_lmfs_coefcalib) (nth (var i) q2d_lmfs_coefmes))
+      ;;        (nth (var i) q2d_lmfs_coefgoal) (var lclerr) (var correrr)))))
 
-;; (if (eq (var i) 3) (set (nth (var i) coefloc) 0.05))
-
-(for [i 3 (var q2d_lmfs_coefcount)]
-  (if (> (call absf (nth (var i) coefloc)) 1e-14)
-      (umo ud1 (s (var q2d_lmfs_surn)) (c (var i)) (nth (var i) coefloc))))
-
-(print "")
+)))
 
 (label end)

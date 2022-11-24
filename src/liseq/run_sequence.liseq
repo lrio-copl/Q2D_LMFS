@@ -1,25 +1,24 @@
-(codev.suppressoutput)
 (codev.startup)
+(codev.suppressoutput)
 
-;; (res `cv_lens:ag_triplet)
 (res `cv_lens:ag_dblgauss)
+(pim n)
 
-(require `q2d_lmfs/setup 9)
+(require `q2d_lmfs/setup 13)
 (require `q2d_lmfs/prep_os_usr (s 11))
 (require `q2d_lmfs/compute_calibration)
 
-(require `q2d_lmfs/measure_q2d_coef)
+(require `example/bump_goal)
 
-(require `get_goal_lin)
-;; (require `gradient_goal)
-;; (require `q2d_lmfs/apply_goal_calib_usr)
-
-(for [i 1 20]
+(for [i 1 5]
+  (print :Correction (var i))
   (require `q2d_lmfs/measure_q2d_coef)
   (require `q2d_lmfs/cancel_mes_goal_usr))
 
-(out y)
-(codev.rename_fig "fig/testv")
+(codev.rename_fig :fig/trash)
+(option fma ((ffd dsc) (nfx 27) (nfy 27) (xmi (* -1 (database yan fl)))
+        (xma (database yan fl)) (ymi (* -1 (database yan fl)))
+        (yma (database yan fl)) (fco cir)))
+
+(codev.rename_fig :fig/testv)
 (option vie)
-(codev.rename_fig "fig/testf")
-(option fie)
