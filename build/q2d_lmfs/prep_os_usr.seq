@@ -1,0 +1,104 @@
+rfd ""
+lcl str ^parsequalifier ^__suppress_orig_ver ^parseinput ^__suppress_out ^__suppress_orig_out ^__cv_macro_orig_out ^__cv_macro_orig_ver
+lcl num ^surq ^parsebufsyntax ^parsevalue ^ok ^parsebufinput ^result
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+^__suppress_out == "n"
+out ^__suppress_out
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+^parsebufinput == 1
+while not((buf.emp b^parsebufinput))
+    ^parsebufinput == (^parsebufinput + 1)
+end while
+buf put b^parsebufinput il+1 "placeover"
+^parsebufsyntax == 1
+while not((buf.emp b^parsebufsyntax))
+    ^parsebufsyntax == (^parsebufsyntax + 1)
+end while
+buf put b^parsebufsyntax il+1 "placeover"
+buf del b^parsebufsyntax
+buf put b^parsebufsyntax il+1 j1 "syntax: prep_os (:sk)<----- uses text qualifiers entered in any order"
+buf put b^parsebufsyntax il+1 j1 "      - or - "
+buf put b^parsebufsyntax il+1 j1 "syntax: prep_os :sk<----- uses numeric inputs in this order only "
+buf del b^parsebufinput
+for ^i 1 1
+    buf put b^parsebufinput il+1 rfstr(^i)
+end for
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+if (ver)
+    ^__cv_macro_orig_ver == "y"
+else
+    ^__cv_macro_orig_ver == "n"
+end if
+in "cv_macro:ParseInputs" ^parsebufinput;out ^__cv_macro_orig_out
+if (^__cv_macro_orig_ver = "y")
+    ver y
+else
+    ver n
+end if
+for ^i 1 (buf.lst b^parsebufinput)
+    ^parseinput == (buf.str b^parsebufinput i^i j1)
+    ^parsequalifier == (buf.str b^parsebufinput i^i j2)
+    ^parsevalue == str_to_num((buf.str b^parsebufinput i^i j3))
+    if (((upcase(^parseinput) = "H")) or ((upcase(^parseinput) = "HELP")))
+        if (out)
+            ^__cv_macro_orig_out == "y"
+        else
+            ^__cv_macro_orig_out == "n"
+        end if
+        out y
+        buf lis nol b^parsebufsyntax
+        out ^__codev_orig_out
+        got __codev_end
+    else if (^parsequalifier = "S")
+        ^surq == ^parsevalue
+    else if (^parsequalifier = "IsNum")
+        if (^i = 1)
+            ^surq == ^parsevalue
+        end if
+    else
+        if (out)
+            ^__cv_macro_orig_out == "y"
+        else
+            ^__cv_macro_orig_out == "n"
+        end if
+        ^result == cverror("Unrecognized input",0)
+        wri concat("Invalid input: ",^parseinput)
+        out y
+        buf lis nol b^parsebufsyntax
+        out ^__codev_orig_out
+        got __codev_end
+    end if
+end for
+^ok == (map s^surq)
+ud1 s^surq
+umr s^surq UD1 "uds_qmn2"
+umn s^surq UD1 2
+umo s^surq UD1 c1 ^ok
+umo s^surq UD1 c2 1
+umn s^surq UD1 ^q2d_lmfs_coefcount
+cir s^surq L"qft" ^ok
+in "q2d_lmfs/reset_method"
+^q2d_lmfs_surn == ^surq
+^q2d_lmfs_kind == "usr"
+^q2d_lmfs_surs == concat("s",num_to_str(^surq))
+lbl __codev_end
+out ^__suppress_orig_out
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if
+buf del b^parsebufinput
+buf del b^parsebufsyntax

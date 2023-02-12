@@ -1,0 +1,116 @@
+rfd ""
+lcl str ^__suppress_out ^__cv_macro_orig_ver ^__cv_macro_orig_out ^__suppress_orig_out ^parsequalifier ^parseinput ^__suppress_orig_ver
+lcl num ^result ^parsebufsyntax ^parsebufinput ^surq ^parsevalue ^700(coefloc)
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+^__suppress_out == "n"
+out ^__suppress_out
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+^parsebufinput == 1
+while not((buf.emp b^parsebufinput))
+    ^parsebufinput == (^parsebufinput + 1)
+end while
+buf put b^parsebufinput il+1 "placeover"
+^parsebufsyntax == 1
+while not((buf.emp b^parsebufsyntax))
+    ^parsebufsyntax == (^parsebufsyntax + 1)
+end while
+buf put b^parsebufsyntax il+1 "placeover"
+buf del b^parsebufsyntax
+buf put b^parsebufsyntax il+1 j1 "syntax: cancel_mes_no_rdy (sk)<----- uses text qualifiers entered in any order"
+buf put b^parsebufsyntax il+1 j1 "      - or - "
+buf put b^parsebufsyntax il+1 j1 "syntax: cancel_mes_no_rdy sk<----- uses numeric inputs in this order only "
+buf del b^parsebufinput
+for ^i 1 1
+    buf put b^parsebufinput il+1 rfstr(^i)
+end for
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+if (ver)
+    ^__cv_macro_orig_ver == "y"
+else
+    ^__cv_macro_orig_ver == "n"
+end if
+in "cv_macro:ParseInputs" ^parsebufinput;out ^__cv_macro_orig_out
+if (^__cv_macro_orig_ver = "y")
+    ver y
+else
+    ver n
+end if
+for ^i 1 (buf.lst b^parsebufinput)
+    ^parseinput == (buf.str b^parsebufinput i^i j1)
+    ^parsequalifier == (buf.str b^parsebufinput i^i j2)
+    ^parsevalue == str_to_num((buf.str b^parsebufinput i^i j3))
+    if (((upcase(^parseinput) = "H")) or ((upcase(^parseinput) = "HELP")))
+        if (out)
+            ^__cv_macro_orig_out == "y"
+        else
+            ^__cv_macro_orig_out == "n"
+        end if
+        out y
+        buf lis nol b^parsebufsyntax
+        out ^__codev_orig_out
+        got __codev_end
+    else if (^parsequalifier = "S")
+        ^surq == ^parsevalue
+    else if (^parsequalifier = "IsNum")
+        if (^i = 1)
+            ^surq == ^parsevalue
+        end if
+    else
+        if (out)
+            ^__cv_macro_orig_out == "y"
+        else
+            ^__cv_macro_orig_out == "n"
+        end if
+        ^result == cverror("Unrecognized input",0)
+        wri concat("Invalid input: ",^parseinput)
+        out y
+        buf lis nol b^parsebufsyntax
+        out ^__codev_orig_out
+        got __codev_end
+    end if
+end for
+if ((umo ud1 s^surq c1) <= 0)
+    ver n
+    out y
+    if (out)
+        ^__cv_macro_orig_out == "y"
+    else
+        ^__cv_macro_orig_out == "n"
+    end if
+    out y;wri ;out ^__cv_macro_orig_out
+    ^result == cverror("Q2D radius must be larger than 0",0)
+    if (out)
+        ^__cv_macro_orig_out == "y"
+    else
+        ^__cv_macro_orig_out == "n"
+    end if
+    out y;wri ;out ^__cv_macro_orig_out
+    got end
+end if
+for ^i 3 ^qfitcoefcount
+    ^i(coefloc) == ((umo ud1 s^surq c^i) - ((^i(qfitcoefmes) / ^i(qfitcoefcalib))))
+end for
+for ^i 3 ^qfitcoefcount
+    umo ud1 s^surq c^i ^i(^coefloc)
+end for
+lbl __codev_end
+out ^__suppress_orig_out
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if
+buf del b^parsebufinput
+buf del b^parsebufsyntax

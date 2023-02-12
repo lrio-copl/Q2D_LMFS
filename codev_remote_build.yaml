@@ -1,0 +1,12 @@
+---
+sync_project_list: [./build/./*, ./src/./fortran/*, ./src/fortran/./Makefile, user.def]
+
+sync_remote_download_list: [./*.dll, ./mkl.dll, ./mkl.lib, libiomp5md.dll]
+
+sync_local_download_directory: output
+
+codev_command: exi y
+
+makefile_location: ./Makefile
+
+codevm_location: C:\CODEV202203_SR1\codevm.exe

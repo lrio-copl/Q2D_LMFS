@@ -1,9 +1,35 @@
-INCLUDE "mkl_dfti.f90"
-
 MODULE math_util
    IMPLICIT NONE
    REAL(KIND=8), PARAMETER :: qmnpi = 4.D0*DATAN(1.D0)
 CONTAINS
+
+   FUNCTION cross_product(a, b) RESULT(c)
+      REAL(KIND=8), INTENT(IN), DIMENSION(3):: a, b
+      REAL(KIND=8), DIMENSION(3) :: c
+
+      c(1) = a(2)*b(3) - a(3)*b(2)
+      c(2) = a(3)*b(1) - a(1)*b(3)
+      c(3) = a(1)*b(2) - a(2)*b(1)
+   END FUNCTION
+
+   FUNCTION get_rot(a, b) RESULT(rot)
+      REAL(KIND=8), INTENT(IN), DIMENSION(3) :: a, b
+      REAL(KIND=8), DIMENSION(3) :: an, bn, cn
+      REAL(KIND=8), DIMENSION(3, 3) :: rot, skew_symmetric, identity
+      INTEGER(KIND=4) :: i, j
+
+      FORALL (i=1:3, j=1:3) identity(i, j) = REAL((i/j)*(j/i), kind=8)
+      an = a/NORM2(a)
+      bn = b/NORM2(b)
+      cn = CROSS_PRODUCT(an, bn)
+      skew_symmetric(1,:) = [REAL(0, KIND=8), -cn(3), cn(2)]
+
+      skew_symmetric(2,:) = [cn(3), REAL(0, KIND=8), -cn(1)]
+
+      skew_symmetric(3,:) = [-cn(2), cn(1), REAL(0, KIND=8)]
+      rot = identity + skew_symmetric + MATMUL(skew_symmetric, skew_symmetric)*(1/(1 - DOT_PRODUCT(an, bn)))
+   END FUNCTION
+
    PURE FUNCTION kron_delta(i, j) BIND(c) RESULT(output)
 
       INTEGER(KIND=4), INTENT(IN), VALUE :: i, j
@@ -25,7 +51,7 @@ CONTAINS
 
       nv = [(REAL(i + 0.5, kind=8), i=0, SIZE(dctivdata) - 1)]
       xk = 0
-      DO i=1,SIZE(dctivdata)
+      DO i = 1, SIZE(dctivdata)
          xk(i) = SUM(dctivdata*COS((qmnpi*(i - 0.5)/SIZE(dctivdata))*nv))
       END DO
       xk = xk*SQRT(2.0D+00/REAL(SIZE(dctivdata), KIND=8))
@@ -237,7 +263,7 @@ CONTAINS
          n_min = 1
       END IF
       m_l_r = REAL(m_local, KIND=8)
-      DO i=1,s_abc_mn_loc(1)
+      DO i = 1, s_abc_mn_loc(1)
          n_l_r = REAL(i - 1 + n_min, KIND=8)
          abc_mn_loc(i, 1) = REAL(n_l_r, KIND=8)
          abc_mn_loc(i, 2) = ((2*n_l_r - 1)* &
@@ -573,7 +599,7 @@ CONTAINS
       REAL(KIND=8), DIMENSION(:), ALLOCATABLE :: tmpmv0, tmpmv1, tmpmv2
 
       IF ((.NOT. ((m_max == m_input) .AND. (n_max == (n_input + 5)))) .AND. (error == 0)) THEN
-         CALL asymjacobip_init(n_input + 5)
+         CALL asymjacobip_init(n_input + INT(5, KIND=4))
          m_max = MAX(m_input, 3)
          k_max = n_max + 2
          j_max = m_max + 1
@@ -640,11 +666,11 @@ CONTAINS
       END IF
 
       IF (.NOT. ALLOCATED(table_index_cache)) THEN
-         ALLOCATE (table_index_cache(coefcount_qmnp, 2))
+         ALLOCATE (table_index_cache(coefcount_qmnp, INT(2, KIND=4)))
       ELSE
          n0table_index_cache = SHAPE(table_index_cache)
-         IF (.NOT. ALL(n0table_index_cache == [coefcount_qmnp, 2])) THEN
-            ALLOCATE (tmptable_index_cache(coefcount_qmnp, 2))
+         IF (.NOT. ALL(n0table_index_cache == [coefcount_qmnp, INT(2, KIND=4)])) THEN
+            ALLOCATE (tmptable_index_cache(coefcount_qmnp, INT(2, KIND=4)))
             CALL MOVE_ALLOC(FROM=tmptable_index_cache, TO=table_index_cache)
          END IF
       END IF
@@ -706,7 +732,7 @@ CONTAINS
          ALLOCATE (smFt(n_table, m_max + 3))
       ELSE
          n0tab = SHAPE(smFt)
-         IF (.NOT. ALL(n0tab == [n_table, m_max + 3])) THEN
+         IF (.NOT. ALL(n0tab == [n_table, m_max + INT(3, KIND=4)])) THEN
             ALLOCATE (tmptab(n_table, m_max + 3))
             CALL MOVE_ALLOC(FROM=tmptab, TO=smFt)
          END IF
@@ -716,7 +742,7 @@ CONTAINS
          ALLOCATE (smGt(n_table, m_max + 3))
       ELSE
          n0tab = SHAPE(smGt)
-         IF (.NOT. ALL(n0tab == [n_table, m_max + 3])) THEN
+         IF (.NOT. ALL(n0tab == [n_table, m_max + INT(3, KIND=4)])) THEN
             ALLOCATE (tmptab(n_table, m_max + 3))
             CALL MOVE_ALLOC(FROM=tmptab, TO=smGt)
          END IF
@@ -726,7 +752,7 @@ CONTAINS
          ALLOCATE (bgAt(n_table, m_max + 3))
       ELSE
          n0tab = SHAPE(bgAt)
-         IF (.NOT. ALL(n0tab == [n_table, m_max + 3])) THEN
+         IF (.NOT. ALL(n0tab == [n_table, m_max + INT(3, KIND=4)])) THEN
             ALLOCATE (tmptab(n_table, m_max + 3))
             CALL MOVE_ALLOC(FROM=tmptab, TO=bgAt)
          END IF
@@ -736,7 +762,7 @@ CONTAINS
          ALLOCATE (bgBt(n_table, m_max + 3))
       ELSE
          n0tab = SHAPE(bgBt)
-         IF (.NOT. ALL(n0tab == [n_table, m_max + 3])) THEN
+         IF (.NOT. ALL(n0tab == [n_table, m_max + INT(3, KIND=4)])) THEN
             ALLOCATE (tmptab(n_table, m_max + 3))
             CALL MOVE_ALLOC(FROM=tmptab, TO=bgBt)
          END IF
@@ -746,7 +772,7 @@ CONTAINS
          ALLOCATE (bgCt(n_table, m_max + 3))
       ELSE
          n0tab = SHAPE(bgCt)
-         IF (.NOT. ALL(n0tab == [n_table, m_max + 3])) THEN
+         IF (.NOT. ALL(n0tab == [n_table, m_max + INT(3, KIND=4)])) THEN
             ALLOCATE (tmptab(n_table, m_max + 3))
             CALL MOVE_ALLOC(FROM=tmptab, TO=bgCt)
          END IF
@@ -1014,7 +1040,7 @@ CONTAINS
          ELSE
             icalc = MAX(1, 6 - i)
             IF (icalc > 1) THEN
-               gamma_array(icalc - 1) = gamma_factorial(icalc - 2, i - 1)
+               gamma_array(icalc - 1) = gamma_factorial(icalc - INT(2, KIND=4), i - INT(1, KIND=4))
             END IF
             gamma_array(icalc:) = (ireal*(2.D0*mv0(icalc:) + (2.D0*ireal - 3.D0))/((mv0(icalc:) + &
                                                                            (ireal - 3.D0))*(2.D0*ireal - 1.D0)))*gamma_array(icalc:)
@@ -1027,9 +1053,9 @@ CONTAINS
          ELSE
             icalc = i - 1
             bgF(2, i) = (4.0*((ireal - 1.0)*ireal)**2.0 + 1.0)/(8.0*(2.0*ireal - 1.0)**2.0) + &
-                        REAL(kron_delta(i - 1, 1), KIND=8)*11.0/32.0
+                        REAL(kron_delta(i - INT(1, KIND=4), 1), KIND=8)*11.0/32.0
             bgG(2, i) = -(((2.0*ireal*ireal - 1.0)*(ireal*ireal - 1.0))/ &
-                          (8.0*(4.0*ireal*ireal - 1.0))) - REAL(kron_delta(i - 1, 1), kind=8)/24.0
+                          (8.0*(4.0*ireal*ireal - 1.0))) - REAL(kron_delta(i - INT(1, KIND=4), INT(1, KIND=4)), kind=8)/24.0
             bgF(3:, i) = (REAL(2*icalc*(mv2 + (icalc - 2))*(3 - 5*mv2 + 4*icalc*(mv2 + &
                                                         (icalc - 2))) + mv2_sqrd*(3 - mv2 + 4*icalc*(mv2 + (icalc - 2))), kind=8)/ &
                           REAL((2*icalc - 1)*(mv2 + (2*icalc - 3))*(mv2 + (2*icalc - 2))* &
@@ -1572,7 +1598,7 @@ CONTAINS
       upj = 1
       sr = SQRT(r)
 
-      DO i=1,m_max
+      DO i = 1, m_max
          u(:, i) = sr*upj(1, i)
       END DO
 
@@ -1580,7 +1606,7 @@ CONTAINS
       uix = m_max
 
       cnm = 0
-      DO i=1,n_max + 1
+      DO i = 1, n_max + 1
          cnm(i, :) = cn(2:, i)
       END DO
       ! smFt = TRANSPOSE(smF(2:, :))
@@ -1591,7 +1617,7 @@ CONTAINS
 
       n_loc = n_table - 1
 
-      DO i=1,m_max
+      DO i = 1, m_max
          dv_(:, i) = cnm(n_loc + 1, i)/smFt(n_loc + 1, i)
       END DO
 
@@ -1602,7 +1628,7 @@ CONTAINS
       IF (n_loc > 0) THEN
          CALL roll_u(uix, u, upj)
 
-         DO i=1,m_max
+         DO i = 1, m_max
             dv(:, i) = (cnm(n_loc, i) - smGt(n_loc, i)*dv_(:, i))/smFt(n_loc, i)
             alpha(:, i) = (upj(:, i)*dv(:, i)) + u(:, i)*(bgAt(n_loc, i) + (r*bgBt(n_loc, i)))*alpha_(:, i)
             afp(:, i) = u(:, i)*bgBt(n_loc, i)*alpha_(:, i)
@@ -1617,7 +1643,7 @@ CONTAINS
             afp_3 = afp_2
             afp_2 = afp_
             afp_ = afp
-            DO j=1,m_max
+            DO j = 1, m_max
                dv(:, j) = (cnm(i, j) - dv(:, j)*smGt(i, j))/smFt(i, j)
                alpha(:, j) = (dv(:, j)*upj(:, j)) + (bgAt(i, j) + (r*bgBt(i, j)))* &
                              (u(:, j)*alpha(:, j)) - (bgCt(i + 1, j)*(u2(:, j)*alpha_2(:, j)))
@@ -1752,7 +1778,7 @@ CONTAINS
                  qmna_output_b(1, :, :), m_max, 1.0D0, aztm_temp, SIZE(theta))
       ! aztm_temp = matmul(mcosf(:, 2:),qmn_aza) + matmul(msinf(:, 2:),qmn_azb)
       !
-      DO j=1,SIZE(rho)
+      DO j = 1, SIZE(rho)
          IF (u(j) == 0) THEN
             aztr(:, j) = aztr0
          ELSE
@@ -2283,7 +2309,7 @@ CONTAINS
       CALL scan_pos_polar(rv, thv, qfitradius)
       CALL normal_departure(rv, datainput, bfs_in, intpf)
 
-      intp(2:, :) = TRANSPOSE(RESHAPE(intpf, (/2*j_max, k_max/)))
+      intp(2:, :) = TRANSPOSE(RESHAPE(intpf, (/INT(2*j_max, KIND=4), k_max/)))
 
       intp(1, :) = 0
 
@@ -2308,7 +2334,7 @@ CONTAINS
       status = DftiFreeDescriptor(My_Desc_Handle)
 
       DO i = 1, SIZE(scan_m_0)
-         CALL jmat_u_x_b(scan_m_0(i) + 1, u_vec, u_vec_sqr, jmat)
+         CALL jmat_u_x_b(scan_m_0(i) + INT(1, KIND=4), u_vec, u_vec_sqr, jmat)
          CALL DGEMV('N', &
                     SIZE(jmat(:, 1)), &
                     SIZE(jmat(1, :)), &

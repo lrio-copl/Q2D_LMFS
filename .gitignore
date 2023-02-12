@@ -1,3 +1,4 @@
 build/codev_stamp
 build/fortran_stamp
 output/
+*.DS_Store

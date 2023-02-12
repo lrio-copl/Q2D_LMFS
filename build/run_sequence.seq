@@ -1,0 +1,182 @@
+lcl str ^__suppress_orig_ver ^__cv_macro_orig_out ^__codev_rename_fig_sysout ^__codev_rename_fig_buf(3) ^__liseq_startup_orig_out ^__cv_macro_orig_ver ^__suppress_orig_out
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+if (^__suppress_orig_out <> "n")
+    out n
+end if
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+if (ver)
+    ^__cv_macro_orig_ver == "y"
+else
+    ^__cv_macro_orig_ver == "n"
+end if
+if (^__cv_macro_orig_out <> "n")
+    out n
+end if
+if (^__cv_macro_orig_ver <> "n")
+    ver n
+end if
+if (out)
+    ^__liseq_startup_orig_out == "y"
+else
+    ^__liseq_startup_orig_out == "n"
+end if
+rec n
+dim m
+fvr n
+lib
+    del "codev.*"
+    del "fig/codev.*.plt"
+    del "fig/codev.*.ras"
+    del "data/codev.*.lis"
+    del "fig/codev.*.eps"
+go
+sys "md fig >nul 2>&1"
+sys "md data >nul 2>&1"
+tad n
+dcs n
+gra t "fig/codev.plt"
+rgr t "fig/codev.ras"
+dev plt cepsfile
+dev ras cepsfile
+out t "data/codev.lis"
+out n
+ver n
+if (^__cv_macro_orig_out = "y")
+    out y
+end if
+if (^__cv_macro_orig_ver = "y")
+    ver y
+end if
+out n
+ver n
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+if (ver)
+    ^__cv_macro_orig_ver == "y"
+else
+    ^__cv_macro_orig_ver == "n"
+end if
+res "cv_lens:ag_dblgauss";out ^__cv_macro_orig_out
+if (^__cv_macro_orig_ver = "y")
+    ver y
+else
+    ver n
+end if
+pim n
+in "q2d_lmfs/setup" 13
+in "q2d_lmfs/prep_os_usr" s1
+in "example/test"
+exi y
+in "example/bump_goal"
+in "q2d_lmfs/apply_goal_usr"
+got exports
+for ^i 1 1
+    if (out)
+        ^__cv_macro_orig_out == "y"
+    else
+        ^__cv_macro_orig_out == "n"
+    end if
+    out y;wri "----";out ^__cv_macro_orig_out
+    if (out)
+        ^__cv_macro_orig_out == "y"
+    else
+        ^__cv_macro_orig_out == "n"
+    end if
+    out y;wri "Correction" ^i;out ^__cv_macro_orig_out
+    in "q2d_lmfs/measure_q2d_coef_curv"
+    in "q2d_lmfs/cancel_mes_goal_usr"
+end for
+lbl exports
+^__codev_rename_fig_buf(1) == "fig/trash"
+for ^__codev_rename_fig_j 1 2
+    if (^__codev_rename_fig_j = 1)
+        ^__codev_rename_fig_buf(2) == "_plt"
+    else
+        ^__codev_rename_fig_buf(2) == "_ras"
+    end if
+    for ^__codev_rename_fig_i 1 2
+        if (^__codev_rename_fig_i = 1)
+            ^__codev_rename_fig_buf(3) == ".eps"
+        else
+            if (^__codev_rename_fig_j = 1)
+                ^__codev_rename_fig_buf(3) == ".plt"
+            else
+                ^__codev_rename_fig_buf(3) == ".ras"
+            end if
+        end if
+        ^__codev_rename_fig_sysout == concat("rm -rf ",join(^__codev_rename_fig_buf,"",1,3))
+        sys ^__codev_rename_fig_sysout
+    end for
+    if (^__codev_rename_fig_j = 1)
+        gra t join(^__codev_rename_fig_buf,"",1,3)
+        dev plt cepsfile
+    else
+        rgr t join(^__codev_rename_fig_buf,"",1,3)
+        dev ras cepsfile
+    end if
+end for
+fma
+    ffd dsc
+    nfx 27
+    nfy 27
+    xmi (-1 * (yan fl))
+    xma (yan fl)
+    ymi (-1 * (yan fl))
+    yma (yan fl)
+    fco cir
+go; plt
+^__codev_rename_fig_buf(1) == "fig/testv"
+for ^__codev_rename_fig_j 1 2
+    if (^__codev_rename_fig_j = 1)
+        ^__codev_rename_fig_buf(2) == "_plt"
+    else
+        ^__codev_rename_fig_buf(2) == "_ras"
+    end if
+    for ^__codev_rename_fig_i 1 2
+        if (^__codev_rename_fig_i = 1)
+            ^__codev_rename_fig_buf(3) == ".eps"
+        else
+            if (^__codev_rename_fig_j = 1)
+                ^__codev_rename_fig_buf(3) == ".plt"
+            else
+                ^__codev_rename_fig_buf(3) == ".ras"
+            end if
+        end if
+        ^__codev_rename_fig_sysout == concat("rm -rf ",join(^__codev_rename_fig_buf,"",1,3))
+        sys ^__codev_rename_fig_sysout
+    end for
+    if (^__codev_rename_fig_j = 1)
+        gra t join(^__codev_rename_fig_buf,"",1,3)
+        dev plt cepsfile
+    else
+        rgr t join(^__codev_rename_fig_buf,"",1,3)
+        dev ras cepsfile
+    end if
+end for
+vie
+go; plt
+lbl __codev_end
+if (^__suppress_orig_out <> "n")
+    out y
+end if
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

@@ -1,26 +1,36 @@
 (codev.suppressoutput)
-(lcl num (nth 1000 coefloc) (var lclerr) (var correrr))
+(lcl num (nth 1000 coefloc2) (nth 1000 coefloc) (var lclerr) (var correrr))
 
-;; (print "       coef          mes           goal          lclerr          corr ")
-(for [i 3 (var q2d_lmfs_coefcount)]
-  (if (> (call absf (nth (var i) q2d_lmfs_coefgoal)) 1e-10)
-      ((set (var lclerr)
-           (- (nth (var i) q2d_lmfs_coefgoal)
-              (* (nth (var i) q2d_lmfs_coefcalib)
-                 (nth (var i) q2d_lmfs_coefmes))))
-      (set (var correrr)
-           (/ (* 250 (call absf (var lclerr)))
-              (* (call sqrtf (- (var i) 2))
-                 (call absf (nth (var i) q2d_lmfs_coefgoal)))))
-      (if (> (var correrr) 1) (set (var correrr) 1))
-      (set (nth (var i) coefloc)
-           (+ (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
-              (* (var correrr) (var lclerr))))
-      (umo ud1 (s (var q2d_lmfs_surn)) (c (var i)) (nth (var i) coefloc))
-      ;; (print (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
-      ;;        (* (nth (var i) q2d_lmfs_coefcalib) (nth (var i) q2d_lmfs_coefmes))
-      ;;        (nth (var i) q2d_lmfs_coefgoal) (var lclerr) (var correrr)))))
+;; (> (call absf (nth (var i) q2d_lmfs_coefgoal)) 1e-10)
+(set (num factor) 1)
+(set (num test) 0)
+;; (for [i 3 (var q2d_lmfs_coefcount)]
+(for [i 3 3]
+  (if (> 1 0)
+      [(set lclerr (- (* 1 (nth (var i) q2d_lmfs_coefgoal))
+                      (* (nth (var i) q2d_lmfs_coefmes) 1)))
+       (set test (+ (var test) (call absf (var lclerr))))
+       ;; (set correrr 1)
+       ;; (set correrr (* 1 (nth (var i) q2d_lmfs_coefcalib)))
+       ;; (set correrr -1.4)
+       (set (nth (var i) coefloc2) (var lclerr))
+       (set (nth (var i) coefloc)
+            (+ (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
+               (* (var correrr) (var lclerr))))
+       (umo ud1 (s (var q2d_lmfs_surn)) (c (var i)) (nth (var i) coefloc))]))
 
-)))
+(print "test:" (var test))
+(print "coef:" (* 1 (nth 3 q2d_lmfs_coefmes)) (* 1 (nth 4 q2d_lmfs_coefmes))
+       (* 1 (nth 5 q2d_lmfs_coefmes)))
+
+(print "goal:" (* 1 (nth 3 q2d_lmfs_coefgoal)) (* 1 (nth 4 q2d_lmfs_coefgoal))
+       (* 1 (nth 5 q2d_lmfs_coefgoal)))
+
+(print "err:" (nth 3 coefloc2) (nth 4 coefloc2) (nth 5 coefloc2))
+
+(print "realcoef:" (nth 3 coefloc) (nth 4 coefloc) (nth 5 coefloc))
+
+(for [i 1 (var q2d_lmfs_coefcount)]
+  (print (nth (var i) q2d_lmfs_coefcalib)))
 
 (label end)

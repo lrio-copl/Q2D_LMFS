@@ -1,0 +1,8 @@
+lcl num ^coeftemp(1000) ^maps ^ang(1000) ^err(1000)
+^maps == ((umo ud1 s^q2d_lmfs_surn c1) - 0.001)
+for ^i 1 ^q2d_lmfs_mapsize
+    ^q2d_lmfs_mesr(^i) == (-1 * ^q2d_lmfs_basedist(^i,1))
+    ^q2d_lmfs_mest(^i) == (-1 * ^q2d_lmfs_basedist(^i,2))
+end for
+in "q2d_lmfs/get_q2d_coef" ^maps
+in "q2d_lmfs/move_mes_to_goal"

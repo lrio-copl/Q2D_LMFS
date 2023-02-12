@@ -1,0 +1,26 @@
+lcl str ^__suppress_out ^__suppress_orig_ver ^__suppress_orig_out
+lcl num ^size ^order
+dro fct @measure_q2d_lmfs_map
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+^__suppress_out == "n"
+out ^__suppress_out
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+^order == #1
+^size == (((((((^order ** 2)) * 2)) - ^order)) + 3)
+in "q2d_lmfs/gen_q2d_lmfs_var" ^size
+in "q2d_lmfs/gen_q2d_lmfs_func"
+lbl __codev_end
+out ^__suppress_orig_out
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

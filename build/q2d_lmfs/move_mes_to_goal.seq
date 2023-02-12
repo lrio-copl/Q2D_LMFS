@@ -1,0 +1,3 @@
+for ^i 1 ^q2d_lmfs_coefcount
+    ^q2d_lmfs_coefgoal(^i) == (^q2d_lmfs_coefcalib(^i) * ^q2d_lmfs_coefmes(^i))
+end for

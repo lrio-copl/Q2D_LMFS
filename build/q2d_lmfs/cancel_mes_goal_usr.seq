@@ -1,0 +1,74 @@
+lcl str ^__suppress_orig_ver ^__suppress_orig_out ^__cv_macro_orig_out
+lcl num ^coefloc(1000) ^correrr ^coefloc2(1000) ^test ^lclerr ^factor
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+if (^__suppress_orig_out <> "n")
+    out n
+end if
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+^factor == 1
+^test == 0
+for ^i 3 3
+    if (1 > 0)
+        ^lclerr == (((1 * ^q2d_lmfs_coefgoal(^i))) - ((^q2d_lmfs_coefmes(^i) * 1)))
+        ^test == (^test + absf(^lclerr))
+        ^coefloc2(^i) == ^lclerr
+        ^coefloc(^i) == ((umo ud1 s^q2d_lmfs_surn c^i) + ((^correrr * ^lclerr)))
+        umo ud1 s^q2d_lmfs_surn c^i ^coefloc(^i)
+    end if
+end for
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "test:" ^test;out ^__cv_macro_orig_out
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "coef:" (1 * ^q2d_lmfs_coefmes(3)) (1 * ^q2d_lmfs_coefmes(4)) (1 * ^q2d_lmfs_coefmes(5));out ^__cv_macro_orig_out
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "goal:" (1 * ^q2d_lmfs_coefgoal(3)) (1 * ^q2d_lmfs_coefgoal(4)) (1 * ^q2d_lmfs_coefgoal(5));out ^__cv_macro_orig_out
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "err:" ^coefloc2(3) ^coefloc2(4) ^coefloc2(5);out ^__cv_macro_orig_out
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "realcoef:" ^coefloc(3) ^coefloc(4) ^coefloc(5);out ^__cv_macro_orig_out
+for ^i 1 ^q2d_lmfs_coefcount
+    if (out)
+        ^__cv_macro_orig_out == "y"
+    else
+        ^__cv_macro_orig_out == "n"
+    end if
+    out y;wri ^q2d_lmfs_coefcalib(^i);out ^__cv_macro_orig_out
+end for
+lbl end
+lbl __codev_end
+if (^__suppress_orig_out <> "n")
+    out y
+end if
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

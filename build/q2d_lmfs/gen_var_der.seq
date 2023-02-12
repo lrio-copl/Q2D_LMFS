@@ -1,0 +1,44 @@
+lcl str ^__suppress_orig_ver ^__suppress_orig_out
+lcl num ^normradius ^mapsize
+gbl str ^q2d_lmfs_surs ^q2d_lmfs_prevsysinfo ^q2d_lmfs_kind
+gbl num ^q2d_lmfs_mapyder(#2) ^q2d_lmfs_coefcalib(#1) ^q2d_lmfs_mapxder(#2) ^q2d_lmfs_xmaxang ^q2d_lmfs_snrm_calib_x(#2,3) ^q2d_lmfs_rayinfo_out(#2,6) ^q2d_lmfs_rayinfo_in(#2,6) ^q2d_lmfs_curv ^q2d_lmfs_coefgoal(#1) ^q2d_lmfs_sagxder(#2) ^q2d_lmfs_ymaxang ^q2d_lmfs_snrm_calib_y(#2,3) ^q2d_lmfs_sagyder(#2) ^q2d_lmfs_surn ^q2d_lmfs_maptder(#2) ^q2d_lmfs_coefmes(#1) ^q2d_lmfs_snrm_calib_z(#2,3) ^q2d_lmfs_sagtder(#2) ^q2d_lmfs_curvcalib ^q2d_lmfs_ymaxobj ^q2d_lmfs_basedist(#2,2) ^q2d_lmfs_sagder(#2) ^q2d_lmfs_maprder(#2) ^q2d_lmfs_mesr(#2) ^q2d_lmfs_coefcount ^q2d_lmfs_sagrder(#2) ^q2d_lmfs_mapsize ^q2d_lmfs_mest(#2) ^q2d_lmfs_snrm(#2,3) ^q2d_lmfs_xmaxobj
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+if (^__suppress_orig_out <> "n")
+    out n
+end if
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+out y
+^q2d_lmfs_coefcount == #1
+^normradius == 1
+^mapsize == #2
+usr usr_get_qfit_pos2_der ^q2d_lmfs_coefcount ^normradius ^mapsize ^q2d_lmfs_mapxder ^q2d_lmfs_mapyder ^q2d_lmfs_maprder ^q2d_lmfs_maptder
+^q2d_lmfs_mapsize == ^mapsize
+for ^i 1 ^q2d_lmfs_coefcount
+    ^q2d_lmfs_coefcalib(^i) == 1
+    ^q2d_lmfs_snrm_calib_x(^i,1) == 0
+    ^q2d_lmfs_snrm_calib_x(^i,2) == 0
+    ^q2d_lmfs_snrm_calib_x(^i,3) == 0
+    ^q2d_lmfs_snrm_calib_y(^i,1) == 0
+    ^q2d_lmfs_snrm_calib_y(^i,2) == 0
+    ^q2d_lmfs_snrm_calib_y(^i,3) == 0
+    ^q2d_lmfs_snrm_calib_z(^i,1) == 0
+    ^q2d_lmfs_snrm_calib_z(^i,2) == 0
+    ^q2d_lmfs_snrm_calib_z(^i,3) == 0
+end for
+lbl __codev_end
+if (^__suppress_orig_out <> "n")
+    out y
+end if
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

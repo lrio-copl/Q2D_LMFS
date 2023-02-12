@@ -1,0 +1,30 @@
+lcl str ^__suppress_orig_out ^__suppress_out ^__suppress_orig_ver
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+^__suppress_out == "n"
+out ^__suppress_out
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+for ^i 3 ^q2d_lmfs_coefcount
+    ^q2d_lmfs_coefgoal(^i) == 0
+    ^q2d_lmfs_coefcalib(^i) == 1
+end for
+^q2d_lmfs_curvcalib == 1
+^q2d_lmfs_ymaxobj == 0
+^q2d_lmfs_xmaxobj == 0
+^q2d_lmfs_ymaxang == 0
+^q2d_lmfs_xmaxang == 0
+^q2d_lmfs_prevsysinfo == ""
+lbl __codev_end
+out ^__suppress_orig_out
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

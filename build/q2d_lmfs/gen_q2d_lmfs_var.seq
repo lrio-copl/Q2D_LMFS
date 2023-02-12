@@ -1,0 +1,25 @@
+lcl str ^__suppress_out ^__suppress_orig_out ^__suppress_orig_ver
+lcl num ^qfitradius ^coefcount ^mapsize
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+^__suppress_out == "n"
+out ^__suppress_out
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+^coefcount == #1
+^qfitradius == 1
+usr usr_get_qfit_pos_size_der ^coefcount ^mapsize
+in "q2d_lmfs/gen_var_der" ^coefcount ^mapsize
+lbl __codev_end
+out ^__suppress_orig_out
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

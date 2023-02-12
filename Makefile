@@ -6,7 +6,7 @@ forsrcdir = src/fortran
 formoddir = $(forsrcdir)/modules
 forsrcfiles = $(wildcard $(forsrcdir)/*.f90) $(wildcard $(formoddir)/*.f90)
 
-codevfigeps = $(wildcard $(builddir)/fig/*_plt.eps)
+codevfigeps = $(wildcard $(outputdir)/fig/*_plt.eps)
 codevfigepsname = $(notdir $(codevfigeps))
 codevfigpdf = $(codevfigepsname:%_plt.eps=%.pdf)
 completecodevpdf = $(addprefix $(outputdir)/fig/, $(codevfigpdf))
@@ -21,15 +21,18 @@ CC_0 = @ $(ACTUAL_CC)
 CC_1 = $(ACTUAL_CC) -v
 CC = $(CC_$(V))
 
-.PHONY: clean all sync
+.PHONY: clean all sync fortran
 
 .ONESHELL:
 
 all : $(builddir)/fortran_stamp $(builddir)/codev_stamp $(completecodevpdf)
 
+fortran: $(builddir)/fortran_stamp
+
 clean: 
 	-@ rm -r $(outputdir) $(builddir)
 	$(CC) -c
+	$(CC) -c --config_path codev_remote_build.yaml 
 
 $(codevseq): $(builddir)/%.seq: $(liseqsrcdir)/%.liseq 
 	-@ mkdir -p $(builddir)/$(subst $(liseqsrcdir)/,,$(dir $<))
@@ -40,8 +43,7 @@ $(builddir)/fortran_stamp : $(forsrcfiles)
 	-@ mkdir -p $(outputdir)
 	$(CC) -k --config_path codev_remote_build.yaml 
 	$(CC) -d --config_path codev_remote_build.yaml 
-	$(CC) -c --config_path codev_remote_build.yaml 
-	-@ rsync -aP $(outputdir)/*.dll $(builddir)/ -q
+	-@ rsync -aP $(outputdir)/*.lib,$(outputdir)/*.dll $(builddir)/ -q
 	-@ touch $(builddir)/fortran_stamp
 
 $(builddir)/codev_stamp : $(codevliseq)  $(codevseq) $(forsrcfiles)

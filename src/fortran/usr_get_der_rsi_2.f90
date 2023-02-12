@@ -11,7 +11,9 @@ SUBROUTINE usr_get_der_rsi_2(pos_r, &
                              maps, &
                              ray_tra_in, &
                              ray_tra_out, &
-                             snrm_calib, &
+                             snrm_calib_x, &
+                             snrm_calib_y, &
+                             snrm_calib_z, &
                              snrm, &
                              der_r, &
                              der_t, &
@@ -19,7 +21,7 @@ SUBROUTINE usr_get_der_rsi_2(pos_r, &
    IMPLICIT NONE
    REAL(KIND=8), INTENT(IN) :: mapcount
    REAL(KIND=8), DIMENSION(INT(mapcount, KIND=4), 6), INTENT(IN) :: ray_tra_in, ray_tra_out
-   REAL(KIND=8), DIMENSION(INT(mapcount, KIND=4), 3), INTENT(IN) :: snrm_calib
+   REAL(KIND=8), DIMENSION(INT(mapcount, KIND=4), 3), INTENT(IN) :: snrm_calib_x, snrm_calib_y, snrm_calib_z
    REAL(KIND=8), DIMENSION(INT(mapcount, KIND=4), 3), INTENT(OUT) :: snrm
    REAL(KIND=8), DIMENSION(INT(mapcount, KIND=4)), INTENT(OUT) :: der_r, der_t
    REAL(KIND=8), DIMENSION(INT(mapcount, KIND=4)), INTENT(IN) :: pos_r, pos_t
@@ -31,7 +33,10 @@ SUBROUTINE usr_get_der_rsi_2(pos_r, &
    REAL(kind=8) :: efl2, alpha, n_in2, n_out2
    REAL(kind=8), DIMENSION(INT(mapcount, kind=4)) :: efl_par, rt, rr, dtx, dty, dtr, dtt
    REAL(kind=8), DIMENSION(INT(mapcount, kind=4), 3) :: obj, out
-   REAL(kind=8), DIMENSION(INT(mapcount, kind=4), 2) :: snrm_calib_temp
+   REAL(kind=8), DIMENSION(3) :: snrm_calib_temp
+   REAL(kind=8), DIMENSION(INT(mapcount, kind=4)) :: pos_rr
+   REAL(KIND=8) :: curr, prev
+   INTEGER(kind=4) :: i
    LOGICAL, DIMENSION(INT(mapcount, kind=4)) :: filter
 
    IF (n_in .EQ. n_out) THEN
@@ -48,60 +53,41 @@ SUBROUTINE usr_get_der_rsi_2(pos_r, &
    efl_par = rr/rt
    filter = (rt <= MINVAL(rt) + 1E-10)
    efl2 = SUM(efl_par*filter)/SUM(filter*1)
-   ! write (*,*) 'efl2', efl2
-   ! efl2 = 99.66
-   ! write (*,*) 'efl22', efl2
 
    obj = ray_tra_in(:, 4:)
    out(:, :2) = ray_tra_out(:, :2)
    out(:, 3) = efl2
-   ! calcul du cosinus directeur (n_out2*dir/norme)
-   ! write (*,*) ray_tra_out(:5, 1)
-   ! write (*,*)
-   ! write (*,*) out(:5, 1)
-   ! write (*,*)
    out = n_out2*out/SPREAD(SQRT(SUM(out**2, dim=2)), 2, 3)
-   ! write (*,*) ray_tra_in(:5, 4)
-   ! write (*,*)
-   ! write (*,*) out(:5, 1)
-   ! out = out
-   ! out =    ! out = out/SPREAD(SQRT(SUM(out**2, dim=2)), 2, 3)
-   ! out = n_out2*out
-
    snrm = obj - ((2*n_out2*obj/n_in2) - out)
-   ! snrm = - ((2*n_out2*obj/n_in2) - out)
-
-   ! write (*,*)
-   ! write (*,*) snrm(:5, 1)
-   ! write (*,*)
-   ! write (*,*) "------------------------------------------"
-
 
    snrm = snrm/SPREAD(SQRT(SUM(snrm**2, dim=2)), 2, 3)
 
-   IF (ALL(snrm_calib(:, :2) .NE. 0)) THEN
-      ! snrm(:, :2) = snrm(:, :2) - snrm_calib(:, :2)
-      snrm_calib_temp = snrm_calib(:, 3:1:-2)
-      snrm_calib_temp(:, 1) = -snrm_calib_temp(:, 1)
-      snrm(:, 1) = SUM(snrm_calib_temp*snrm(:, 1::2), dim=2)
-      ! der_x = snrm(:,1)
-      snrm_calib_temp = snrm_calib(:, 3:2:-1)
-      snrm_calib_temp(:, 1) = -snrm_calib_temp(:, 1)
-      snrm(:, 2) = SUM(snrm_calib_temp*snrm(:, 2:), dim=2)
-      ! der_y = snrm(:,2)
-      snrm(:, 3) = SQRT(1 - SUM(snrm(:, :2)**2, dim=2))
-      snrm = snrm/SPREAD(SQRT(SUM(snrm**2, dim=2)), 2, 3)
-   ! ELSE
-   !    der_x = snrm(:, 1)/snrm(:, 3)
-   !    der_y = snrm(:, 2)/snrm(:, 3)
+   IF (ALL(SUM(snrm_calib_z(:, :)**2, dim=2) .NE. 0)) THEN
+      DO i = 1, INT(mapcount, KIND=4)
+         snrm_calib_temp = snrm(i, :)
+         snrm(i, 1) = DOT_PRODUCT(snrm_calib_temp, snrm_calib_x(i, :))
+         snrm(i, 2) = DOT_PRODUCT(snrm_calib_temp, snrm_calib_y(i, :))
+         snrm(i, 3) = DOT_PRODUCT(snrm_calib_temp, snrm_calib_z(i, :))
+      END DO
    END IF
-
-   ! write (*,*) "salut"
 
    der_x = snrm(:, 1)/snrm(:, 3)
    der_y = snrm(:, 2)/snrm(:, 3)
 
+   curr = pos_r(INT(mapcount, kind=4))
+   prev = REAL(0, KIND=8)
+   DO i = INT(mapcount, kind=4), 1, -1
+      IF (curr .NE. pos_r(i)) THEN
+         prev = curr
+         curr = pos_r(i)
+      END IF
+      pos_rr(i) = curr - prev
+   END DO
+
    der_r = maps*(der_x*COS(pos_t) + der_y*SIN(pos_t))
+   der_r = der_r - pos_r*SUM(pos_rr*der_r)/SUM(pos_rr*pos_r)
+   ! dr = dr - test1[:, 0] * np.sum(drr * dr) / np.sum(drr * test1[:, 0])
+
    der_t = maps*(pos_r*der_y*COS(pos_t) &
                  - pos_r*der_x*SIN(pos_t))
 

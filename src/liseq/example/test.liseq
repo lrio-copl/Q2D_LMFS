@@ -1,0 +1,43 @@
+(codev.suppressoutput)
+
+(out y)
+(require `q2d_lmfs/measure_q2d_coef)
+(usr usr_gen_snrm_calib (var q2d_lmfs_snrm) (var q2d_lmfs_snrm_calib_x)
+     (var q2d_lmfs_snrm_calib_y) (var q2d_lmfs_snrm_calib_z)
+     (var q2d_lmfs_mapsize))
+(require `q2d_lmfs/measure_q2d_coef)
+
+(print "test=np.array([")
+(for [i 1 (var q2d_lmfs_mapsize)]
+  (print ["["
+          (nth (var i) q2d_lmfs_maprder)
+          ","
+          (nth (var i) q2d_lmfs_maptder)
+          ","
+          (nth (var i) q2d_lmfs_mesr)
+          ","
+          (nth (var i) q2d_lmfs_mest)
+          "],"]))
+
+(print "])")
+
+(set (nth 3 q2d_lmfs_coefgoal) 0.002)
+(set (nth 4 q2d_lmfs_coefgoal) -0.002)
+(require `q2d_lmfs/apply_goal_usr)
+(require `q2d_lmfs/measure_q2d_coef)
+
+(print "test1=np.array([")
+(for [i 1 (var q2d_lmfs_mapsize)]
+  (print ["["
+          (nth (var i) q2d_lmfs_maprder)
+          ","
+          (nth (var i) q2d_lmfs_maptder)
+          ","
+          (nth (var i) q2d_lmfs_mesr)
+          ","
+          (nth (var i) q2d_lmfs_mest)
+          "],"]))
+
+(print "])")
+
+(exi y)

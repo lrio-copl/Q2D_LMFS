@@ -1,0 +1,30 @@
+lcl str ^__suppress_orig_ver ^__suppress_orig_out
+lcl num ^coefloc(1000)
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+if (^__suppress_orig_out <> "n")
+    out n
+end if
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+for ^i 3 ^q2d_lmfs_coefcount
+    ^coefloc(^i) == ((umo ud1 s^q2d_lmfs_surn c^i) + ((^q2d_lmfs_coefcalib(^i) * ^q2d_lmfs_coefgoal(^i))))
+end for
+for ^i 3 ^q2d_lmfs_coefcount
+    umo ud1 s^q2d_lmfs_surn c^i ^coefloc(^i)
+end for
+lbl __codev_end
+if (^__suppress_orig_out <> "n")
+    out y
+end if
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

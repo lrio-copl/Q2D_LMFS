@@ -1,0 +1,16 @@
+fct @measure_q2d_lmfs_map
+    lcl num ^output ^raytra_out(8) ^raytra_in(8)
+    ^output == 0
+    for ^i 1 ^q2d_lmfs_mapsize
+        for ^j 1 6
+            ^raytra_in(^j) == ^q2d_lmfs_rayinfo_in(^i,^j)
+        end for
+        ^output == raytra_xyzlmn(0,0,0,^raytra_in,^raytra_out)
+        for ^j 1 6
+            ^q2d_lmfs_rayinfo_out(^i,^j) == ^raytra_out(^j)
+        end for
+        if (^output <> 0)
+            rtn
+        end if
+    end for
+end fct ^output

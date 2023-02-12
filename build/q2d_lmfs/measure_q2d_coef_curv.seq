@@ -1,0 +1,22 @@
+lcl str ^__suppress_orig_out ^__suppress_orig_ver ^__suppress_out
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+^__suppress_out == "n"
+out ^__suppress_out
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+in "q2d_lmfs/measure_q2d_coef"
+in "q2d_lmfs/remove_curv_coef" ^q2d_lmfs_coefcount ^q2d_lmfs_coefmes ^q2d_lmfs_curv
+lbl __codev_end
+out ^__suppress_orig_out
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

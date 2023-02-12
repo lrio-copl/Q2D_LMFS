@@ -1,0 +1,10 @@
+---
+sync_project_list: [./build/./*]
+
+sync_local_download_directory: output
+
+sync_remote_download_list: [fig, data, len]
+
+codev_command: in run_sequence
+
+codevm_location: C:\CODEV202203_SR1\codevm.exe

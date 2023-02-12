@@ -1,0 +1,72 @@
+lcl str ^__suppress_orig_out ^__suppress_orig_ver ^__cv_macro_orig_out
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+if (^__suppress_orig_out <> "n")
+    out n
+end if
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+out y
+in "q2d_lmfs/measure_q2d_coef"
+usr usr_gen_snrm_calib ^q2d_lmfs_snrm ^q2d_lmfs_snrm_calib_x ^q2d_lmfs_snrm_calib_y ^q2d_lmfs_snrm_calib_z ^q2d_lmfs_mapsize
+in "q2d_lmfs/measure_q2d_coef"
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "test=np.array((";out ^__cv_macro_orig_out
+for ^i 1 ^q2d_lmfs_mapsize
+    if (out)
+        ^__cv_macro_orig_out == "y"
+    else
+        ^__cv_macro_orig_out == "n"
+    end if
+    out y;wri "(" ^q2d_lmfs_maprder(^i) "," ^q2d_lmfs_maptder(^i) "," ^q2d_lmfs_mesr(^i) "," ^q2d_lmfs_mest(^i) "),";out ^__cv_macro_orig_out
+end for
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "))";out ^__cv_macro_orig_out
+^q2d_lmfs_coefgoal(3) == 0.002
+^q2d_lmfs_coefgoal(4) == -0.002
+in "q2d_lmfs/apply_goal_usr"
+in "q2d_lmfs/measure_q2d_coef"
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "test1=np.array((";out ^__cv_macro_orig_out
+for ^i 1 ^q2d_lmfs_mapsize
+    if (out)
+        ^__cv_macro_orig_out == "y"
+    else
+        ^__cv_macro_orig_out == "n"
+    end if
+    out y;wri "(" ^q2d_lmfs_maprder(^i) "," ^q2d_lmfs_maptder(^i) "," ^q2d_lmfs_mesr(^i) "," ^q2d_lmfs_mest(^i) "),";out ^__cv_macro_orig_out
+end for
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+out y;wri "))";out ^__cv_macro_orig_out
+exi y
+lbl __codev_end
+if (^__suppress_orig_out <> "n")
+    out y
+end if
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

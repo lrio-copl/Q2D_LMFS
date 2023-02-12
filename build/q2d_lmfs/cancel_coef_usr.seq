@@ -1,0 +1,23 @@
+lcl str ^__suppress_out ^__suppress_orig_out ^__suppress_orig_ver
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+^__suppress_out == "n"
+out ^__suppress_out
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+for ^i 3 ^q2d_lmfs_coefcount
+    umo ud1 s^q2d_lmfs_surn c^i 0
+end for
+lbl __codev_end
+out ^__suppress_orig_out
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

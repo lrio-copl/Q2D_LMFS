@@ -1,0 +1,3 @@
+lcl num ^normradius
+^normradius == #1
+usr usr_get_qmn_coef2_der ^q2d_lmfs_coefcount ^q2d_lmfs_coefmes ^normradius ^q2d_lmfs_mapsize ^q2d_lmfs_mesr ^q2d_lmfs_mest

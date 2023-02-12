@@ -1,9 +1,10 @@
-(codev.suppressoutput)
-(lcl num (nth 1000 coefloc))
-(for [i 3 (var q2d_lmfs_coefcount)]
-  (set (nth (var i) coefloc)
-       (+ (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
-          (* (nth (var i) q2d_lmfs_coefcalib) (nth (var i) q2d_lmfs_coefgoal)))))
-
-(for [i 3 (var q2d_lmfs_coefcount)]
-  (umo ud1 (s (var q2d_lmfs_surn)) (c (var i)) (nth (var i) coefloc)))
+;; (codev.suppressoutput)
+(codev.output (lcl num (nth 1000 coefloc))
+              (for [i 3 (var q2d_lmfs_coefcount)]
+                (set (nth (var i) coefloc)
+                     (+ (database umo ud1 (s (var q2d_lmfs_surn)) (c (var i)))
+                        (* (nth (var i) q2d_lmfs_coefgoal)
+                           (nth (var i) q2d_lmfs_coefcalib)))))
+              (for [i 3 (var q2d_lmfs_coefcount)]
+                (umo ud1 (s (var q2d_lmfs_surn)) (c (var i))
+                     (nth (var i) coefloc))))
