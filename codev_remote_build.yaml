@@ -1,4 +1,6 @@
 ---
+directory_extension: "/q2d_build/"
+
 sync_project_list: [./build/./*, ./src/./fortran/*, ./src/fortran/./Makefile, user.def]
 
 sync_remote_download_list: [./*.dll, ./mkl.dll, ./mkl.lib, libiomp5md.dll]

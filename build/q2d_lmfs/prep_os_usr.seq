@@ -1,13 +1,14 @@
 rfd ""
-lcl str ^parsequalifier ^__suppress_orig_ver ^parseinput ^__suppress_out ^__suppress_orig_out ^__cv_macro_orig_out ^__cv_macro_orig_ver
-lcl num ^surq ^parsebufsyntax ^parsevalue ^ok ^parsebufinput ^result
+lcl str ^__cv_macro_orig_ver ^__suppress_orig_ver ^parseinput ^__cv_macro_orig_out ^parsequalifier ^__suppress_orig_out
+lcl num ^ok ^result ^parsebufinput ^surq ^parsevalue ^parsebufsyntax
 if (out)
     ^__suppress_orig_out == "y"
 else
     ^__suppress_orig_out == "n"
 end if
-^__suppress_out == "n"
-out ^__suppress_out
+if (^__suppress_orig_out <> "n")
+    out n
+end if
 if (ver)
     ^__suppress_orig_ver == "y"
 else
@@ -41,11 +42,20 @@ if (ver)
 else
     ^__cv_macro_orig_ver == "n"
 end if
-in "cv_macro:ParseInputs" ^parsebufinput;out ^__cv_macro_orig_out
+if (^__cv_macro_orig_out <> "n")
+    out n
+end if
+if (^__cv_macro_orig_ver <> "n")
+    ver n
+end if
+in "cv_macro:ParseInputs" ^parsebufinput
+out n
+ver n
+if (^__cv_macro_orig_out = "y")
+    out y
+end if
 if (^__cv_macro_orig_ver = "y")
     ver y
-else
-    ver n
 end if
 for ^i 1 (buf.lst b^parsebufinput)
     ^parseinput == (buf.str b^parsebufinput i^i j1)
@@ -74,14 +84,19 @@ for ^i 1 (buf.lst b^parsebufinput)
             ^__cv_macro_orig_out == "n"
         end if
         ^result == cverror("Unrecognized input",0)
-        wri concat("Invalid input: ",^parseinput)
+        if (out)
+            ^__cv_macro_orig_out == "y"
+        else
+            ^__cv_macro_orig_out == "n"
+        end if
+        out y;wri concat("Invalid input: ",^parseinput);out ^__cv_macro_orig_out
         out y
         buf lis nol b^parsebufsyntax
         out ^__codev_orig_out
         got __codev_end
     end if
 end for
-^ok == (map s^surq)
+^ok == (mav s^surq)
 ud1 s^surq
 umr s^surq UD1 "uds_qmn2"
 umn s^surq UD1 2
@@ -94,7 +109,9 @@ in "q2d_lmfs/reset_method"
 ^q2d_lmfs_kind == "usr"
 ^q2d_lmfs_surs == concat("s",num_to_str(^surq))
 lbl __codev_end
-out ^__suppress_orig_out
+if (^__suppress_orig_out <> "n")
+    out y
+end if
 if (^__suppress_orig_ver = "y")
     ver y
 else

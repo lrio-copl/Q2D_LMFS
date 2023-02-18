@@ -1,5 +1,5 @@
-lcl str ^__cv_macro_temp_lens_filename ^__cv_macro_orig_ver ^__suppress_orig_ver ^__cv_macro_orig_out ^__suppress_orig_out
-lcl num ^calibval ^curvval ^lcl_cal ^curvbase ^coeftemp(1000) ^curvtemp ^coefbase(1000) ^max_cal
+lcl str ^__cv_macro_orig_ver ^__cv_macro_temp_lens_filename ^__cv_macro_orig_out ^__suppress_orig_ver ^__suppress_orig_out
+lcl num ^calibval ^curvbase ^coeftemp(1000) ^coefbase(1000) ^max_cal ^lcl_cal ^curvval ^curvtemp ^calib_mean
 if (out)
     ^__suppress_orig_out == "y"
 else
@@ -16,42 +16,13 @@ end if
 if (^q2d_lmfs_kind = "usr")
     in "q2d_lmfs/cancel_coef_usr"
 end if
-^calibval == 1
+^calibval == 1e-3
 ^curvval == 1.2e-05
-in "q2d_lmfs/measure_q2d_coef"
 ^__cv_macro_temp_lens_filename == (fil)
-save __cv_macro_temp_lens_86796d099e588c
+save __cv_macro_temp_lens_0335b70b6ce19e
 pim n
-for ^i 1 ^q2d_lmfs_coefcount
-    ^q2d_lmfs_coefcalib(^i) == 1
-end for
 in "q2d_lmfs/measure_q2d_coef"
-for ^i 3 ^q2d_lmfs_coefcount
-    ^coefbase(^i) == ^q2d_lmfs_coefmes(^i)
-    ^q2d_lmfs_coefgoal(^i) == ^calibval
-end for
-if (^q2d_lmfs_kind = "usr")
-    in "q2d_lmfs/cancel_coef_usr"
-    in "q2d_lmfs/apply_goal_usr"
-end if
-in "q2d_lmfs/measure_q2d_coef"
-for ^i 3 ^q2d_lmfs_coefcount
-    ^coeftemp(^i) == (((^q2d_lmfs_coefmes(^i) - ^coefbase(^i))) / 2)
-    ^q2d_lmfs_coefgoal(^i) == (-1 * ^calibval)
-end for
-if (^q2d_lmfs_kind = "usr")
-    in "q2d_lmfs/cancel_coef_usr"
-    in "q2d_lmfs/apply_goal_usr"
-end if
-in "q2d_lmfs/measure_q2d_coef"
-for ^i 3 ^q2d_lmfs_coefcount
-    ^coeftemp(^i) == (^coeftemp(^i) - ((((^q2d_lmfs_coefmes(^i) - ^coefbase(^i))) / 2)))
-    ^coeftemp(^i) == (^coeftemp(^i) - ^q2d_lmfs_coefmes(^i))
-    ^q2d_lmfs_coefgoal(^i) == 0
-end for
-for ^i 3 ^q2d_lmfs_coefcount
-    ^q2d_lmfs_coefcalib(^i) == (((1.4142135623731 * ^calibval)) / ^coeftemp(^i))
-end for
+usr usr_gen_snrm_calib ^q2d_lmfs_snrm ^q2d_lmfs_snrm_calib_x ^q2d_lmfs_snrm_calib_y ^q2d_lmfs_snrm_calib_z ^q2d_lmfs_mapsize
 if (out)
     ^__cv_macro_orig_out == "y"
 else
@@ -62,7 +33,7 @@ if (ver)
 else
     ^__cv_macro_orig_ver == "n"
 end if
-res __cv_macro_temp_lens_86796d099e588c;out ^__cv_macro_orig_out
+res __cv_macro_temp_lens_0335b70b6ce19e;out ^__cv_macro_orig_out
 if (^__cv_macro_orig_ver = "y")
     ver y
 else
@@ -86,7 +57,7 @@ if (^__cv_macro_orig_ver <> "n")
 end if
 rfn ^__cv_macro_temp_lens_filename
 lib
-    del "__cv_macro_temp_lens_86796d099e588c.*.len"
+    del "__cv_macro_temp_lens_0335b70b6ce19e.*.len"
 go
 out n
 ver n
@@ -97,7 +68,66 @@ if (^__cv_macro_orig_ver = "y")
     ver y
 end if
 ^__cv_macro_temp_lens_filename == (fil)
-save __cv_macro_temp_lens_2985841f74356a
+save __cv_macro_temp_lens_7882043341aad2
+pim n
+for ^i 3 50
+    in "q2d_lmfs/cancel_coef_usr"
+    umo ud1 s^q2d_lmfs_surn c^i ^calibval
+    in "q2d_lmfs/measure_q2d_coef"
+    ^q2d_lmfs_coefcalib(^i) == (^calibval / ^q2d_lmfs_coefmes(^i))
+    umo ud1 s^q2d_lmfs_surn c^i 0
+    ^calib_mean == (^calib_mean + ^q2d_lmfs_coefcalib(^i))
+end for
+^calib_mean == (^calib_mean / ((20 - 3)))
+for ^i 50 ^q2d_lmfs_coefcount
+    ^q2d_lmfs_coefcalib(^i) == ^calib_mean
+end for
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+if (ver)
+    ^__cv_macro_orig_ver == "y"
+else
+    ^__cv_macro_orig_ver == "n"
+end if
+res __cv_macro_temp_lens_7882043341aad2;out ^__cv_macro_orig_out
+if (^__cv_macro_orig_ver = "y")
+    ver y
+else
+    ver n
+end if
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+if (ver)
+    ^__cv_macro_orig_ver == "y"
+else
+    ^__cv_macro_orig_ver == "n"
+end if
+if (^__cv_macro_orig_out <> "n")
+    out n
+end if
+if (^__cv_macro_orig_ver <> "n")
+    ver n
+end if
+rfn ^__cv_macro_temp_lens_filename
+lib
+    del "__cv_macro_temp_lens_7882043341aad2.*.len"
+go
+out n
+ver n
+if (^__cv_macro_orig_out = "y")
+    out y
+end if
+if (^__cv_macro_orig_ver = "y")
+    ver y
+end if
+^__cv_macro_temp_lens_filename == (fil)
+save __cv_macro_temp_lens_9014841f74356a
 pim n
 in "q2d_lmfs/apply_goal_usr"
 in "q2d_lmfs/measure_q2d_coef_curv"
@@ -123,7 +153,7 @@ if (ver)
 else
     ^__cv_macro_orig_ver == "n"
 end if
-res __cv_macro_temp_lens_2985841f74356a;out ^__cv_macro_orig_out
+res __cv_macro_temp_lens_9014841f74356a;out ^__cv_macro_orig_out
 if (^__cv_macro_orig_ver = "y")
     ver y
 else
@@ -147,7 +177,7 @@ if (^__cv_macro_orig_ver <> "n")
 end if
 rfn ^__cv_macro_temp_lens_filename
 lib
-    del "__cv_macro_temp_lens_2985841f74356a.*.len"
+    del "__cv_macro_temp_lens_9014841f74356a.*.len"
 go
 out n
 ver n

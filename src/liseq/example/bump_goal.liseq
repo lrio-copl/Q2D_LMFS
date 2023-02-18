@@ -133,5 +133,8 @@
                      1.9563015231389e-08 -3.6795227276125e-07
                      -0.0039065844414584))
 
+;; (for [i 100 103]
+;;   (set (nth (var i) q2d_lmfs_coefgoal) (* 1 (nth (var i) localcoef))))
+
 (for [i 3 (var q2d_lmfs_coefcount)]
-  (set (nth (var i) q2d_lmfs_coefgoal) (* 1 (nth (var i) localcoef))))
+  (set (nth (var i) q2d_lmfs_coefgoal) (* 0.1 (nth (var i) localcoef))))

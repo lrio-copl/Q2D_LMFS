@@ -1,5 +1,5 @@
-lcl str ^__suppress_orig_out ^__cv_macro_orig_ver ^__cv_macro_orig_out ^newsysinfo ^__suppress_orig_ver ^original_field_type ^__cv_macro_temp_lens_filename
-lcl num ^indn1 ^maps ^indn2 ^localsurf ^changedsur ^ok ^rayinfotemp(1000,6) ^xaim ^yaim ^flipped ^flippedflag
+lcl str ^__suppress_orig_ver ^__cv_macro_orig_ver ^original_field_type ^__cv_macro_orig_out ^__cv_macro_temp_lens_filename ^newsysinfo ^__suppress_orig_out
+lcl num ^localsurf ^flippedflag ^maps ^ok ^changedsur ^indn1 ^yaim(1000) ^rayinfotemp(1000,6) ^xaim(1000) ^indn2
 if (out)
     ^__suppress_orig_out == "y"
 else
@@ -71,82 +71,38 @@ if (^newsysinfo = ^q2d_lmfs_prevsysinfo)
     got skipgrid
 end if
 ^__cv_macro_temp_lens_filename == (fil)
-save __cv_macro_temp_lens_00493862461010
+save __cv_macro_temp_lens_46586318884151
 ^q2d_lmfs_prevsysinfo == ^newsysinfo
 ^ok == cnvtfield("rih")
+for ^i 2 ((num s) - 1)
+    cir s^i ((mav s^i) - 0.0001)
+end for
 out n
 vuy fl (1 - 1e-05)
 vly fl (1 - 1e-05)
 vux fl 1
 vlx fl 1
-del fa
 pos zl onl y
 ^changedsur == 0
 if ((typ sur s^localsurf) <> "SPH")
     sph s^localsurf
 end if
-del fa
-^flipped == 0
-if ^flippedflag
-    if (out)
-        ^__cv_macro_orig_out == "y"
-    else
-        ^__cv_macro_orig_out == "n"
-    end if
-    if (ver)
-        ^__cv_macro_orig_ver == "y"
-    else
-        ^__cv_macro_orig_ver == "n"
-    end if
-    if (^__cv_macro_orig_out <> "n")
-        out n
-    end if
-    if (^__cv_macro_orig_ver <> "n")
-        ver n
-    end if
-    in "cv_macro:reverse_system"
-    out n
-    ver n
-    if (^__cv_macro_orig_out = "y")
-        out y
-    end if
-    if (^__cv_macro_orig_ver = "y")
-        ver y
-    end if
-    del ape sa
-    ^flipped == 1
-    ^localsurf == ((num s) - ^localsurf)
-end if
-ins zl
-zoo foc zl s^localsurf
-zoo thi si zl
-thi si zl 0
-pos zl onl y
 for ^i 1 ^q2d_lmfs_mapsize 1
-    ^xaim == (^maps * ^q2d_lmfs_mapxder(^i))
-    ^yaim == (^maps * ^q2d_lmfs_mapyder(^i))
-    xri ^xaim
-    yri ^yaim
-    ^q2d_lmfs_rayinfo_in(^i,1) == (x s1 fl zl r1)
-    ^q2d_lmfs_rayinfo_in(^i,2) == (y s1 fl zl r1)
-    ^q2d_lmfs_rayinfo_in(^i,3) == (z s1 fl zl r1)
-    ^q2d_lmfs_rayinfo_in(^i,4) == (l so fl zl r1)
-    ^q2d_lmfs_rayinfo_in(^i,5) == (m so fl zl r1)
-    ^q2d_lmfs_rayinfo_in(^i,6) == (n so fl zl r1)
+    ^xaim(^i) == (^maps * ^q2d_lmfs_mapxder(^i))
+    ^yaim(^i) == (^maps * ^q2d_lmfs_mapyder(^i))
 end for
-if ^flipped
+if ^flippedflag
     ^__cv_macro_temp_lens_filename == (fil)
-    save __cv_macro_temp_lens_4024911e87c854
-    thi si zl 0
-    zoo foc zl s(num s zl-1)
-    zoo foc zl si-1
-    dez (num z)
-    dar si
-    ^ok == @measure_q2d_lmfs_map
+    save __cv_macro_temp_lens_03921b013196d6
+    pim n
+    pik rdy s0 rdy s1
+    thi s0 0
+    pik gla s0 s1
     for ^i 1 ^q2d_lmfs_mapsize
-        ^rayinfotemp(^i,1) == - ^q2d_lmfs_rayinfo_out(^i,1)
-        ^rayinfotemp(^i,2) == - ^q2d_lmfs_rayinfo_out(^i,2)
-        ^rayinfotemp(^i,3) == - ^q2d_lmfs_rayinfo_out(^i,3)
+        xob ^xaim(^i)
+        yob ^yaim(^i)
+        ^yaim(^i) == (y fl zl r1 si)
+        ^xaim(^i) == (x fl zl r1 si)
     end for
     if (out)
         ^__cv_macro_orig_out == "y"
@@ -158,7 +114,7 @@ if ^flipped
     else
         ^__cv_macro_orig_ver == "n"
     end if
-    res __cv_macro_temp_lens_4024911e87c854;out ^__cv_macro_orig_out
+    res __cv_macro_temp_lens_03921b013196d6;out ^__cv_macro_orig_out
     if (^__cv_macro_orig_ver = "y")
         ver y
     else
@@ -182,7 +138,7 @@ if ^flipped
     end if
     rfn ^__cv_macro_temp_lens_filename
     lib
-        del "__cv_macro_temp_lens_4024911e87c854.*.len"
+        del "__cv_macro_temp_lens_03921b013196d6.*.len"
 go
     out n
     ver n
@@ -192,25 +148,22 @@ go
     if (^__cv_macro_orig_ver = "y")
         ver y
     end if
-    thi si zl (thi s^localsurf zl-1)
-    zoo foc zl s(num s zl-1)
+else
+    ins zl+1
+    zoo foc zl s^localsurf
     dez (num z)
-    dar si
-    ^ok == @measure_q2d_lmfs_map
-    for ^i 1 ^q2d_lmfs_mapsize
-        ^rayinfotemp(^i,4) == ^q2d_lmfs_rayinfo_out(^i,4)
-        ^rayinfotemp(^i,5) == ^q2d_lmfs_rayinfo_out(^i,5)
-        ^rayinfotemp(^i,6) == ^q2d_lmfs_rayinfo_out(^i,6)
-    end for
-    for ^i 1 ^q2d_lmfs_mapsize
-        ^q2d_lmfs_rayinfo_in(^i,1) == ^rayinfotemp(^i,1)
-        ^q2d_lmfs_rayinfo_in(^i,2) == ^rayinfotemp(^i,2)
-        ^q2d_lmfs_rayinfo_in(^i,3) == ^rayinfotemp(^i,3)
-        ^q2d_lmfs_rayinfo_in(^i,4) == ^rayinfotemp(^i,4)
-        ^q2d_lmfs_rayinfo_in(^i,5) == ^rayinfotemp(^i,5)
-        ^q2d_lmfs_rayinfo_in(^i,6) == ^rayinfotemp(^i,6)
-    end for
+    thi si 0
 end if
+for ^i 1 ^q2d_lmfs_mapsize
+    xri (^xaim(^i) / 1)
+    yri ^yaim(^i)
+    ^q2d_lmfs_rayinfo_in(^i,1) == (x s1 fl zl r1)
+    ^q2d_lmfs_rayinfo_in(^i,2) == (y s1 fl zl r1)
+    ^q2d_lmfs_rayinfo_in(^i,3) == (z s1 fl zl r1)
+    ^q2d_lmfs_rayinfo_in(^i,4) == (l so fl zl r1)
+    ^q2d_lmfs_rayinfo_in(^i,5) == (m so fl zl r1)
+    ^q2d_lmfs_rayinfo_in(^i,6) == (n so fl zl r1)
+end for
 if (out)
     ^__cv_macro_orig_out == "y"
 else
@@ -221,7 +174,7 @@ if (ver)
 else
     ^__cv_macro_orig_ver == "n"
 end if
-res __cv_macro_temp_lens_00493862461010;out ^__cv_macro_orig_out
+res __cv_macro_temp_lens_46586318884151;out ^__cv_macro_orig_out
 if (^__cv_macro_orig_ver = "y")
     ver y
 else
@@ -245,7 +198,7 @@ if (^__cv_macro_orig_ver <> "n")
 end if
 rfn ^__cv_macro_temp_lens_filename
 lib
-    del "__cv_macro_temp_lens_00493862461010.*.len"
+    del "__cv_macro_temp_lens_46586318884151.*.len"
 go
 out n
 ver n

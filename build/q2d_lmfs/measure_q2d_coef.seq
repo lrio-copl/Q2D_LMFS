@@ -1,31 +1,33 @@
-lcl str ^__suppress_orig_ver ^__suppress_out ^__suppress_orig_out
+lcl str ^__suppress_orig_ver ^__suppress_orig_out
 lcl num ^maps
 if (out)
     ^__suppress_orig_out == "y"
 else
     ^__suppress_orig_out == "n"
 end if
-^__suppress_out == "n"
-out ^__suppress_out
+if (^__suppress_orig_out <> "n")
+    out n
+end if
 if (ver)
     ^__suppress_orig_ver == "y"
 else
     ver n
 end if
-bnd n
 if ((typ sur s^q2d_lmfs_surn) = "UD1")
     if ((umr ud1 s^q2d_lmfs_surn) = "uds_qmn2.dll")
         ^maps == ((umo ud1 s^q2d_lmfs_surn c1) - 0.001)
     else
-        ^maps == ((map s^q2d_lmfs_surn) - 0.001)
+        ^maps == ((mav s^q2d_lmfs_surn) - 0.001)
     end if
 else
-    ^maps == ((map s^q2d_lmfs_surn) - 0.001)
+    ^maps == ((mav s^q2d_lmfs_surn) - 0.001)
 end if
 in "q2d_lmfs/get_q2d_map" ^maps
 in "q2d_lmfs/get_q2d_coef" ^maps
 lbl __codev_end
-out ^__suppress_orig_out
+if (^__suppress_orig_out <> "n")
+    out y
+end if
 if (^__suppress_orig_ver = "y")
     ver y
 else

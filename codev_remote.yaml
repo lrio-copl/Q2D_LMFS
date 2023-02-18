@@ -1,4 +1,6 @@
 ---
+directory_extension: "/q2d/"
+
 sync_project_list: [./build/./*]
 
 sync_local_download_directory: output

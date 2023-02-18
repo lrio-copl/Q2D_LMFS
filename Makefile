@@ -43,7 +43,8 @@ $(builddir)/fortran_stamp : $(forsrcfiles)
 	-@ mkdir -p $(outputdir)
 	$(CC) -k --config_path codev_remote_build.yaml 
 	$(CC) -d --config_path codev_remote_build.yaml 
-	-@ rsync -aP $(outputdir)/*.lib,$(outputdir)/*.dll $(builddir)/ -q
+	rsync -aP $(outputdir)/*.lib $(builddir)/ -q
+	rsync -aP $(outputdir)/*.dll $(builddir)/ -q
 	-@ touch $(builddir)/fortran_stamp
 
 $(builddir)/codev_stamp : $(codevliseq)  $(codevseq) $(forsrcfiles)

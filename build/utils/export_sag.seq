@@ -1,0 +1,51 @@
+lcl str ^__suppress_orig_out ^__cv_macro_orig_out ^__cv_macro_orig_ver ^__suppress_orig_ver
+if (out)
+    ^__suppress_orig_out == "y"
+else
+    ^__suppress_orig_out == "n"
+end if
+if (^__suppress_orig_out <> "n")
+    out n
+end if
+if (ver)
+    ^__suppress_orig_ver == "y"
+else
+    ver n
+end if
+buf y
+if (out)
+    ^__cv_macro_orig_out == "y"
+else
+    ^__cv_macro_orig_out == "n"
+end if
+if (ver)
+    ^__cv_macro_orig_ver == "y"
+else
+    ^__cv_macro_orig_ver == "n"
+end if
+if (^__cv_macro_orig_out <> "n")
+    out n
+end if
+if (^__cv_macro_orig_ver <> "n")
+    ver n
+end if
+in "cv_macro:sagplot" ^q2d_lmfs_surn "B" 0 0 0 0 51 "NO" "NO"
+out n
+ver n
+if (^__cv_macro_orig_out = "y")
+    out y
+end if
+if (^__cv_macro_orig_ver = "y")
+    ver y
+end if
+buf n
+buf exp b0 #1
+lbl __codev_end
+if (^__suppress_orig_out <> "n")
+    out y
+end if
+if (^__suppress_orig_ver = "y")
+    ver y
+else
+    ver n
+end if

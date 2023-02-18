@@ -1,52 +1,51 @@
-(codev.startup)
 (codev.suppressoutput)
 
 (res "cv_lens:ag_dblgauss")
 
-;; (set cap sa cir 0)
-
-;; (set (num ok) (call cnvtfield :RIH))
-;; (ins (+ so 1))
-;; (rmd (+ so 1) refl)
-;; (sca fac sa -1)
-
-;; (thi (+ so 1) -800)
-;; (set (num ok) (call cnvtfield :ANG))
-
 (pim n)
+;; (goto exports)
+(codev.findbuf brms)
 
 (require :q2d_lmfs/setup 13)
-(require :q2d_lmfs/prep_os_usr (s 1))
+(require :q2d_lmfs/prep_os_usr (s 9))
 
-;; (require :q2d_lmfs/compute_calibration)
+(require :utils/export_sag :data/sag_sph)
 
-(require :example/test)
+(require :q2d_lmfs/compute_calibration)
 
-(exi y)
-
-(require :example/bump_goal)
-
+(require :example/logo_goal)
 (require :q2d_lmfs/apply_goal_usr)
 
-(goto exports)
+(require :q2d_lmfs/measure_q2d_coef_curv)
+(require :utils/export_q2d_data :fig_disto_init)
+(require :utils/export_sag :data/sag_init)
 ;; (goto exports)
-(for [i 1 1]
+(for [i 1 10]
   (print "----")
-  (print :Correction (var i))
-  ;; (require :q2d_lmfs/compute_calibration)
+  (print :Correction :s (var i))
   (require :q2d_lmfs/measure_q2d_coef_curv)
-  (require :q2d_lmfs/cancel_mes_goal_usr))
+  (require :q2d_lmfs/cancel_mes_goal_usr)
+  (nil))
+
+(require :utils/export_q2d_data :fig_disto)
+(require :utils/export_sag :data/sag)
 
 (label exports)
+;; (codev.rename_fig :fig/testv)
+;; (option vie)
 
-(codev.rename_fig :fig/trash)
-(option fma ((ffd dsc) (nfx 27) (nfy 27) (xmi (* -1 (database yan fl)))
-                       (xma (database yan fl)) (ymi (* -1 (database yan fl)))
-                       (yma (database yan fl)) (fco cir)))
+;; (codev.rename_fig :fig/test)
+;; (require "cv_macro:surface_power_plot" 9 1 0 0 "POWER" "YES" 0 0)
+;; (ras)
+;; (codev.rename_fig :fig/cal_dist)
+;; (option fma ((ffd dst) (wbf (b (var brms))) (nfx 27) (nfy 27) (xmi (* -1 (database yan fl)))
+;;                        (xma (database yan fl)) (ymi (* -1 (database yan fl)))
+;;                        (yma (database yan fl)) (fco cir)))
+;; (BUF EXP (b (var brms)) :data/fma_fig_disto.dat)
 
-;; (ben s1)
-
-;; (ade s1 -20)
-
-(codev.rename_fig :fig/testv)
-(option vie)
+;; (codev.rename_fig :fig/rms_spo)
+;; (option fma ((FFD RWE) (wbf (b (var brms))) (nfx 27) (nfy 27)
+;;                        (xmi (* -1 (database yan fl))) (xma (database yan fl))
+;;                        (ymi (* -1 (database yan fl))) (yma (database yan fl))
+;;                        (fco cir)))
+;; (BUF EXP (b (var brms)) :data/fma_fig_rms.dat)

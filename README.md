@@ -1,19 +1,15 @@
-https://www.microsoft.com/en-ca/download/details.aspx?id=48145
+# Installation:
 
-ntdll.dll => /c/Windows/SYSTEM32/ntdll.dll (0x7ff806790000)
-KERNEL32.DLL => /c/Windows/System32/KERNEL32.DLL (0x7ff803a70000)
-KERNELBASE.dll => /c/Windows/System32/KERNELBASE.dll (0x7ff802b80000)
-tsappcmp.dll => /c/Windows/SYSTEM32/tsappcmp.dll (0x7fffc6770000)
-msvcrt.dll => /c/Windows/System32/msvcrt.dll (0x7ff805c80000)
-RPCRT4.dll => /c/Windows/System32/RPCRT4.dll (0x7ff806400000)
-combase.dll => /c/Windows/System32/combase.dll (0x7ff8042c0000)
-ucrtbase.dll => /c/Windows/System32/ucrtbase.dll (0x7ff803800000)
-bcryptPrimitives.dll => /c/Windows/System32/bcryptPrimitives.dll (0x7ff803930000)
-USER32.dll => /c/Windows/System32/USER32.dll (0x7ff803f10000)
-win32u.dll => /c/Windows/System32/win32u.dll (0x7ff8037e0000)
-GDI32.dll => /c/Windows/System32/GDI32.dll (0x7ff804130000)
-gdi32full.dll => /c/Windows/System32/gdi32full.dll (0x7ff802830000)
-msvcp_win.dll => /c/Windows/System32/msvcp_win.dll (0x7ff802ae0000)
-ADVAPI32.dll => /c/Windows/System32/ADVAPI32.dll (0x7ff8039c0000)
-sechost.dll => /c/Windows/System32/sechost.dll (0x7ff805da0000)
-uds_qmn.dll => /c/Users/guall24/projets/q2d_lmfs/uds_qmn.dll (0x51810000)
+[Microsoft c++ redist](https://www.microsoft.com/en-ca/download/details.aspx?id=48145)
+
+[Ifort compiler](https://www.intel.com/content/www/us/en/developer/tools/oneapi/fortran-compiler.html#gs.qfk1fv)
+
+gnutools including make
+
+A makefile is provided in `src/fortran/Makefile`
+
+Precompiled DLL are also provided in `build`
+
+# Usage
+
+An example (`run_sequence.seq`) is provided for CODEV.

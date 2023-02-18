@@ -42,14 +42,23 @@ SUBROUTINE usr_get_der_rsi_2(pos_r, &
    IF (n_in .EQ. n_out) THEN
       n_in2 = n_in
       n_out2 = -n_out
+   ELSE IF (n_in .EQ. -n_out) THEN
+      n_in2 = n_in
+      n_out2 = n_out
    ELSE
       n_in2 = n_in
       n_out2 = n_out
+      IF (n_in2 < n_out2) THEN
+         n_out2 = -n_out2
+      END IF
    END IF
+   ! n_in2 = 1.5
+   ! n_in2 = -1
+   ! n_out2 = 1
    alpha = SIGN(1.0, n_in2*n_out2)
 
    rr = SQRT(ray_tra_out(:, 1)**2 + ray_tra_out(:, 2)**2)
-   rt = SQRT(1 - ray_tra_in(:, 6)**2)
+   rt = SIGN(1.0, n_in)*SQRT(1 - ray_tra_in(:, 6)**2)
    efl_par = rr/rt
    filter = (rt <= MINVAL(rt) + 1E-10)
    efl2 = SUM(efl_par*filter)/SUM(filter*1)
@@ -85,7 +94,7 @@ SUBROUTINE usr_get_der_rsi_2(pos_r, &
    END DO
 
    der_r = maps*(der_x*COS(pos_t) + der_y*SIN(pos_t))
-   der_r = der_r - pos_r*SUM(pos_rr*der_r)/SUM(pos_rr*pos_r)
+   der_r = der_r - SIN(rt)*SUM(pos_rr*der_r)/SUM(pos_rr*SIN(rt))
    ! dr = dr - test1[:, 0] * np.sum(drr * dr) / np.sum(drr * test1[:, 0])
 
    der_t = maps*(pos_r*der_y*COS(pos_t) &

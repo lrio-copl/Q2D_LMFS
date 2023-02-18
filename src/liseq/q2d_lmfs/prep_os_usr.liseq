@@ -1,6 +1,6 @@
 (codev.suppressoutput)
 (codev.parseinput prep_os (s surq :sk))
-(set (num (var ok)) (database map (s (var surq))))
+(set (num (var ok)) (database mav (s (var surq))))
 
 (UD1 (s (var surq)))
 (UMR (s (var surq)) UD1 :uds_qmn2)

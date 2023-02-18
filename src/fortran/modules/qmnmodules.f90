@@ -1,3 +1,5 @@
+INCLUDE "mkl_dfti.f90"
+
 MODULE math_util
    IMPLICIT NONE
    REAL(KIND=8), PARAMETER :: qmnpi = 4.D0*DATAN(1.D0)
@@ -22,11 +24,11 @@ CONTAINS
       an = a/NORM2(a)
       bn = b/NORM2(b)
       cn = CROSS_PRODUCT(an, bn)
-      skew_symmetric(1,:) = [REAL(0, KIND=8), -cn(3), cn(2)]
+      skew_symmetric(1, :) = [REAL(0, KIND=8), -cn(3), cn(2)]
 
-      skew_symmetric(2,:) = [cn(3), REAL(0, KIND=8), -cn(1)]
+      skew_symmetric(2, :) = [cn(3), REAL(0, KIND=8), -cn(1)]
 
-      skew_symmetric(3,:) = [-cn(2), cn(1), REAL(0, KIND=8)]
+      skew_symmetric(3, :) = [-cn(2), cn(1), REAL(0, KIND=8)]
       rot = identity + skew_symmetric + MATMUL(skew_symmetric, skew_symmetric)*(1/(1 - DOT_PRODUCT(an, bn)))
    END FUNCTION
 

@@ -1,0 +1,5 @@
+(codev.suppressoutput)
+
+(codev.export #1
+              (require "cv_macro:sagplot" (var q2d_lmfs_surn) :B 0 0 0 0 51 :NO
+                       :NO))
