@@ -94,8 +94,8 @@ SUBROUTINE uds_qmn2(x, y, z, curv, f, fx, fy, fz, error, mode, coef, coefCount) 
    END IF
    r2 = x**2 + y**2
    IF ((CURV**2*r2) > 1.0D+00) THEN
-      error = INT(SIGN(1.0d+00,(CURV * r2) - z ))
-      RETURN 
+      error = INT(SIGN(1.0D+00, (CURV*r2) - z))
+      RETURN
    END IF
 
    CALL qmnp_init_from_coef(coefcount - 2)
@@ -137,7 +137,7 @@ SUBROUTINE uds_qmn2(x, y, z, curv, f, fx, fy, fz, error, mode, coef, coefCount) 
    CALL build_map_int2(x, y, curv/coef(2), &
                        0.D0, COEF(1), &
                        coef(3:), output)
-   output=output*coef(2)
+   output = output*coef(2)
    F = output(1) - z
    FX = output(2)
    FY = output(3)
